@@ -1,11 +1,11 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "theme": "maple",
+  "name": "Apex Documentation",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#5F810A",
+    "light": "#C0ED2E",
+    "dark": "#C0ED2E"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -36,7 +36,22 @@
       },
       {
         "tab": "API Reference",
-        "openapi": "https://api.main.apexscore.ai/schema/"
+        "groups": [
+          {
+            "group": "API Documentation",
+            "pages": [
+              "api-reference/introduction"
+            ]
+          },
+          {
+            "group": "Endpoint Examples",
+            "openapi": {
+              "source": "api-reference/openapi.yaml",
+              "directory": "api-reference"
+            }
+          }
+          
+        ]
       }
     ],
     "global": {

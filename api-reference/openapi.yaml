@@ -1,0 +1,5362 @@
+openapi: 3.0.3
+info:
+  title: API v1 Public
+  version: 1.4.2
+  description: |2+
+
+
+    Apex API functions and available endpoints.
+
+    To authenticate, use the `Token` value from the `auth/login` endpoint in the Authorize dialog.
+
+  license:
+    name: Proprietary to Emotive Technologies Inc.
+paths:
+  /api/v1/attitudes/:
+    get:
+      operationId: attitudes_list
+      summary: List
+      parameters:
+      - in: query
+        name: mona_version__audience_type
+        schema:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+        description: |-
+          * `0` - None
+          * `1` - Customers
+          * `2` - Employees
+          * `3` - Donors
+          * `4` - Media
+          * `5` - Gathering 2024 Lecturees
+      - in: query
+        name: mona_version__id
+        schema:
+          type: integer
+      - in: query
+        name: mona_version__sequence
+        schema:
+          type: integer
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - Metadata/Attitudes
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAttitudeList'
+          description: ''
+  /api/v1/attitudes/{id}/:
+    get:
+      operationId: attitudes_retrieve
+      summary: Retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this attitude.
+        required: true
+      tags:
+      - Metadata/Attitudes
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attitude'
+          description: ''
+  /api/v1/auth/login:
+    post:
+      operationId: auth_login_create
+      description: Log into the API
+      summary: Log in
+      tags:
+      - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+          description: ''
+  /api/v1/comments/:
+    get:
+      operationId: comments_list
+      description: Retrieve a list of comments that are attached to a content type
+        (e.g. a `Report`) and that object's `id` (`Report.id`).
+      summary: List
+      parameters:
+      - in: query
+        name: content_type
+        schema:
+          type: string
+          enum:
+          - datasetconfiguration
+          - report
+          - report_attitude
+        description: The object type to retrieve comments for.
+        required: true
+      - in: query
+        name: object_id
+        schema:
+          type: string
+          format: uuid
+        description: The id of the object of `content_type` to retrieve comments for.
+        required: true
+      - in: query
+        name: ordering
+        schema:
+          type: string
+          enum:
+          - -created_at
+          - created_at
+        description: Which field to use when ordering the results.
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: tag
+        schema:
+          type: string
+        description: The tag to filter results to (if any)
+      tags:
+      - Comments
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCommentReadList'
+          description: ''
+    post:
+      operationId: comments_create
+      summary: Create
+      tags:
+      - Comments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentWrite'
+            examples:
+              ReportRankCommentExample:
+                value:
+                  content_type: report
+                  object_id: af2458ce-dce9-42a5-bf4b-13ff91dc48dc
+                  tag: rank
+                  text: Hi, this comment is extremely valuable
+                summary: Report Rank Comment Example
+                description: Example of common parameters creating a comment attached
+                  to `Report id=af2458ce` with sub category `report__rank`
+              ReportAttitudeCommentExample:
+                value:
+                  content_type: report_attitude
+                  object_id: 2f6b320d-4049-4c80-80bc-2f89751d19f3
+                  text: Hi, this comment is extremely valuable
+                summary: Report Attitude Comment Example
+                description: Example of common parameters creating a comment attached
+                  to `Report attitude id=2f6b320d`
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentRead'
+          description: ''
+  /api/v1/comments/{id}/:
+    get:
+      operationId: comments_retrieve
+      summary: Retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this comment.
+        required: true
+      tags:
+      - Comments
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentRead'
+          description: ''
+    put:
+      operationId: comments_update
+      summary: Update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this comment.
+        required: true
+      tags:
+      - Comments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommentWrite'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentWrite'
+          description: ''
+    patch:
+      operationId: comments_partial_update
+      summary: Partial Update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this comment.
+        required: true
+      tags:
+      - Comments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCommentWrite'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentWrite'
+          description: ''
+    delete:
+      operationId: comments_destroy
+      summary: Destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this comment.
+        required: true
+      tags:
+      - Comments
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/organization-invitations/:
+    get:
+      operationId: organization_invitations_list
+      description: Perform operations on organization invitation.
+      summary: List
+      parameters:
+      - in: query
+        name: email
+        schema:
+          type: string
+      - in: query
+        name: organization_id
+        schema:
+          type: string
+          format: uuid
+        description: Invitee's/Inviter's organization.
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: status
+        schema:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+        description: |-
+          Status of the invitation, default status is pending.
+
+          * `0` - pending
+          * `1` - accepted
+          * `2` - cancelled
+          * `3` - expired
+          * `4` - revoked
+      - in: query
+        name: token
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - Organization Invitations
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrganizationInvitationList'
+          description: ''
+    post:
+      operationId: organization_invitations_create
+      description: |-
+        Create organization invitation to given email addresses.
+
+        A caller may pass an array of data to create invitations in bulk. See examples.
+
+        When creating a COLLABORATOR role (`role` = 1), a `accessible_portfolio_ids` parameter is required to assign
+        the collaborator specific portfolio access. If this is not sent, the invitation will fail. If this is sent when
+        creating an ADMIN or MEMBER invitation, it will be ignored because they have access to all portfolios of an organization.
+        See examples.
+
+        Will return 201 on complete (all invites) success, or 202 when the request completed but there were
+        errors with at least one invite.
+      summary: Create
+      tags:
+      - Organization Invitations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationInvitation'
+            examples:
+              SingleInvitation:
+                value:
+                  organization_id: e8e912b6-ba9b-4c3a-bb4f-d04bdc370843
+                  email: user@example.com
+                  first_name: Member
+                  last_name: Person
+                  role: 0
+                summary: Single Invitation
+              MultipleInvitations:
+                value:
+                - organization_id: e8e912b6-ba9b-4c3a-bb4f-d04bdc370843
+                  email: user1@example.com
+                  first_name: Member
+                  last_name: Person
+                  role: 0
+                - organization_id: e8e912b6-ba9b-4c3a-bb4f-d04bdc370843
+                  email: user2@example.com
+                  first_name: Admin
+                  last_name: Person
+                  role: 2
+                summary: Multiple Invitations
+              CollaboratorInvitationFormat:
+                value:
+                  organization_id: e8e912b6-ba9b-4c3a-bb4f-d04bdc370843
+                  email: user1@example.com
+                  first_name: Member
+                  last_name: Person
+                  role: 1
+                  accessible_portfolio_ids:
+                  - 4358c068-f6ef-4107-8ff1-0efd9326c0d4
+                summary: Collaborator Invitation Format
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InlineOrganizationInvitationCreate200'
+          description: ''
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InlineOrganizationInvitationCreate202'
+          description: ''
+  /api/v1/organization-invitations/{id}/:
+    get:
+      operationId: organization_invitations_retrieve
+      description: Perform operations on organization invitation.
+      summary: Retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this organization invitation.
+        required: true
+      tags:
+      - Organization Invitations
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationInvitation'
+          description: ''
+    put:
+      operationId: organization_invitations_update
+      description: Perform operations on organization invitation.
+      summary: Update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this organization invitation.
+        required: true
+      tags:
+      - Organization Invitations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationInvitation'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationInvitation'
+          description: ''
+    patch:
+      operationId: organization_invitations_partial_update
+      description: |-
+        Patch for role OrganizationInvitation.
+
+        In permissions.py 'can_access_invitation' has permission logic.
+      summary: Partial Update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this organization invitation.
+        required: true
+      tags:
+      - Organization Invitations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrganizationInvitation'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationInvitation'
+          description: ''
+    delete:
+      operationId: organization_invitations_destroy
+      description: Perform operations on organization invitation.
+      summary: Destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this organization invitation.
+        required: true
+      tags:
+      - Organization Invitations
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/organization-invitations/accept/:
+    post:
+      operationId: organization_invitations_accept_create
+      description: |-
+        The endpoint to accept an invitation, by token, for either a user that exists already
+        or a user that is signing up concurrently with accepting the invitation.
+
+        See examples stated for each case: existing user or new user. New users must send sign-up data
+        or else a 400 response will be returned.
+
+        The expiry date and status of invitation are validated before acceptance.
+      summary: Accept
+      tags:
+      - Organization Invitations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InlineOrganizationInvitationAcceptRequest'
+            examples:
+              ForANewUser(signsUpANewUser):
+                value:
+                  token: e8e912b6-ba9b-4c3a-bb4f-d04bdc370843
+                  user:
+                    password: pwd
+                    confirm_password: pwd
+                    first_name: Fname
+                    last_name: Lname
+                summary: For a new user (signs up a new user)
+              ForAnExistingUser:
+                value:
+                  token: e8e912b6-ba9b-4c3a-bb4f-d04bdc370843
+                summary: For an existing user
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InlineOrganizationInvitationAccept200Response'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InlineOrganizationInvitationAccept400Response'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InlineOrganizationInvitationAccept404Response'
+          description: ''
+  /api/v1/organization-invitations/resend_invitation/:
+    post:
+      operationId: organization_invitations_resend_invitation_create
+      description: Resend invitation and email to already invited user.
+      summary: Resend Invitation
+      tags:
+      - Organization Invitations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationInvitation'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationInvitation'
+          description: ''
+  /api/v1/organization-invitations/validate_token/:
+    get:
+      operationId: organization_invitations_validate_token_retrieve
+      description: 'Validate invitation token as able to accept. Therefore: it exists,
+        is PENDING status, and is not expired.'
+      summary: Validate Token
+      parameters:
+      - in: query
+        name: token
+        schema:
+          type: string
+          format: uuid
+        description: The token to validate
+        required: true
+      tags:
+      - Organization Invitations
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InlineOrganizationInvitationValidateTokenSuccessResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InlineOrganizationInvitationValidateTokenFailureResponse'
+          description: ''
+  /api/v1/organization_members/:
+    get:
+      operationId: organization_members_list
+      description: CRUD Operations for OrganizationMember Model.
+      summary: List
+      parameters:
+      - in: query
+        name: organization_id
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - Organization Members
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrganizationMemberList'
+          description: ''
+    post:
+      operationId: organization_members_create
+      description: CRUD Operations for OrganizationMember Model.
+      summary: Create
+      tags:
+      - Organization Members
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationMember'
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationMember'
+          description: ''
+  /api/v1/organization_members/{id}/:
+    get:
+      operationId: organization_members_retrieve
+      description: CRUD Operations for OrganizationMember Model.
+      summary: Retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this organization member.
+        required: true
+      tags:
+      - Organization Members
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationMember'
+          description: ''
+    put:
+      operationId: organization_members_update
+      description: CRUD Operations for OrganizationMember Model.
+      summary: Update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this organization member.
+        required: true
+      tags:
+      - Organization Members
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationMember'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationMember'
+          description: ''
+    patch:
+      operationId: organization_members_partial_update
+      description: |-
+        Update the role for OrganizationMember.
+
+        If role is COLLABORATOR we expect portfolios to be given.
+        Will replace to portfolio access grant records. if portfolios are given.
+      summary: Partial Update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this organization member.
+        required: true
+      tags:
+      - Organization Members
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrganizationMember'
+            examples:
+              ChangeARoleToCollaborator:
+                value:
+                  role: '1'
+                  accessible_portfolios:
+                  - 6c58243e-f4ce-4295-abd8-d7d6df94996d
+                  - 9e1086df-87f7-48ca-9fed-a54eb878ff0c
+                summary: Change a role to collaborator
+              DisableAMember'sAccess:
+                value:
+                  is_active: false
+                summary: Disable a member's access
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationMember'
+          description: ''
+    delete:
+      operationId: organization_members_destroy
+      description: CRUD Operations for OrganizationMember Model.
+      summary: Destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this organization member.
+        required: true
+      tags:
+      - Organization Members
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/organizations/:
+    get:
+      operationId: organizations_list
+      description: Perform operations on Organizations
+      summary: List
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - Organizations
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrganizationList'
+          description: ''
+    post:
+      operationId: organizations_create
+      description: Perform operations on Organizations
+      summary: Create
+      tags:
+      - Organizations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organization'
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: ''
+  /api/v1/organizations/{id}/:
+    get:
+      operationId: organizations_retrieve
+      description: |-
+        Retrieve an organization.
+
+        Returns 404 not found on Organization does not exist or if the current user has insuffient authorization.
+      summary: Retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Organizations
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: ''
+    put:
+      operationId: organizations_update
+      description: Perform operations on Organizations
+      summary: Update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Organizations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organization'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: ''
+    patch:
+      operationId: organizations_partial_update
+      description: Perform operations on Organizations
+      summary: Partial Update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Organizations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrganization'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+          description: ''
+    delete:
+      operationId: organizations_destroy
+      description: Perform operations on Organizations
+      summary: Destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Organizations
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/portfolios/:
+    get:
+      operationId: portfolios_list
+      summary: List
+      parameters:
+      - in: query
+        name: organization_id
+        schema:
+          type: string
+          format: uuid
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - Portfolios
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPortfolioList'
+          description: ''
+    post:
+      operationId: portfolios_create
+      summary: Create
+      tags:
+      - Portfolios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Portfolio'
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+          description: ''
+  /api/v1/portfolios/{id}/:
+    get:
+      operationId: portfolios_retrieve
+      summary: Retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Portfolios
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+          description: ''
+    put:
+      operationId: portfolios_update
+      summary: Update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Portfolios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Portfolio'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+          description: ''
+    patch:
+      operationId: portfolios_partial_update
+      summary: Partial Update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Portfolios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPortfolio'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+          description: ''
+    delete:
+      operationId: portfolios_destroy
+      summary: Destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Portfolios
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/portfolios/{id}/metrics/:
+    get:
+      operationId: portfolios_metrics_retrieve
+      description: Get the metrics for the portfolio
+      summary: Metrics
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Portfolios
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+          description: ''
+  /api/v1/portfolios/{id}/portfolio_documents/:
+    get:
+      operationId: portfolios_portfolio_documents_list
+      description: Get all portfolio documents associated with this portfolio
+      summary: Portfolio Documents
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - Portfolios
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPortfolioDocumentList'
+          description: ''
+  /api/v1/portfolios/{id}/portfolio_documents/{document_id}/download/:
+    get:
+      operationId: portfolios_portfolio_documents_download_retrieve
+      description: Download a specific portfolio document as a PDF file
+      summary: Download Portfolio Document
+      parameters:
+      - in: path
+        name: document_id
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Portfolios
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+          description: ''
+  /api/v1/portfolios/{id}/survey/:
+    get:
+      operationId: portfolios_survey_retrieve
+      description: |-
+        Download or update the survey as JSON as it is built by the Portfolio settings
+
+        The PATCH method will allow a developer to tweak some of the settings that build
+        the structure of the survey and immediately get back the new survey structure
+      summary: Survey
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Portfolios
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Survey'
+          description: ''
+    patch:
+      operationId: portfolios_survey_partial_update
+      description: |-
+        Download or update the survey as JSON as it is built by the Portfolio settings
+
+        The PATCH method will allow a developer to tweak some of the settings that build
+        the structure of the survey and immediately get back the new survey structure
+      summary: Survey
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Portfolios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSurvey'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Survey'
+          description: ''
+  /api/v1/portfolios/{id}/survey_download/:
+    get:
+      operationId: portfolios_survey_download_retrieve
+      description: Download the survey as a file as it is built by the Portfolio settings
+      summary: Survey Download
+      parameters:
+      - in: query
+        name: download_format
+        schema:
+          enum:
+          - txt
+          - docx
+          type: string
+          default: txt
+          minLength: 1
+        description: |-
+          * `txt` - txt
+          * `docx` - docx
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Portfolios
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Survey'
+          description: ''
+  /api/v1/ranks/:
+    get:
+      operationId: ranks_list
+      summary: List
+      parameters:
+      - in: query
+        name: mona_version__audience_type
+        schema:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+        description: |-
+          * `0` - None
+          * `1` - Customers
+          * `2` - Employees
+          * `3` - Donors
+          * `4` - Media
+          * `5` - Gathering 2024 Lecturees
+      - in: query
+        name: mona_version__id
+        schema:
+          type: integer
+      - in: query
+        name: mona_version__sequence
+        schema:
+          type: integer
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - Metadata/Ranks
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRankList'
+          description: ''
+  /api/v1/report_publishing/verify/:
+    post:
+      operationId: report_publishing_verify_create
+      description: Verify the verification code for a published report.
+      summary: Verify
+      tags:
+      - Report Publishings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Verification'
+        required: true
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/:
+    get:
+      operationId: reports_list
+      summary: List
+      parameters:
+      - in: query
+        name: group_by
+        schema:
+          type: string
+          enum:
+          - portfolio.name
+          - portfolio_id
+      - in: query
+        name: issued_at_after
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: issued_at_before
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: mona_version__audience_type
+        schema:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+        description: |-
+          * `0` - None
+          * `1` - Customers
+          * `2` - Employees
+          * `3` - Donors
+          * `4` - Media
+          * `5` - Gathering 2024 Lecturees
+      - in: query
+        name: name
+        schema:
+          type: string
+      - in: query
+        name: only_comparable
+        schema:
+          type: boolean
+        description: Set to true to only include Reports that are comparable at this
+          time (which excludes sample reports and those marked for non-comparison
+          or incomplete), and only their Configurations that are comparable and completed
+          with a result.
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: portfolio_id__in
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: tags
+        schema:
+          type: array
+          items:
+            type: string
+            nullable: true
+            enum:
+            - competitive
+            - industry
+            - none
+            - segment
+        description: |-
+          * `competitive` - Competitive
+          * `segment` - Segment
+          * `industry` - Industry
+          * `none` - None
+        explode: true
+        style: form
+      tags:
+      - Reports
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: reports_create
+      summary: Create
+      tags:
+      - Reports
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          description: No response body
+  /api/v1/reports/{id}/:
+    get:
+      operationId: reports_retrieve
+      summary: Retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this report.
+        required: true
+      tags:
+      - Reports
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: reports_update
+      summary: Update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this report.
+        required: true
+      tags:
+      - Reports
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+    patch:
+      operationId: reports_partial_update
+      summary: Partial Update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this report.
+        required: true
+      tags:
+      - Reports
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: reports_destroy
+      summary: Destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this report.
+        required: true
+      tags:
+      - Reports
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/reports/{id}/attachments/:
+    get:
+      operationId: reports_attachments_list
+      summary: Attachments
+      parameters:
+      - in: query
+        name: configuration_id
+        schema:
+          type: string
+          format: uuid
+        description: Optional configuration id to retrieve. If not provided, the primary
+          configuration will be used.
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this report.
+        required: true
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - Reports
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Attachment'
+          description: ''
+  /api/v1/reports/{id}/configuration_status/:
+    get:
+      operationId: reports_configuration_status_retrieve
+      description: |-
+        Retrieves the status of a report's primary configuration unless a specific configuration
+        is provided. Used to determine the state of background processing and overall completeness with low
+        overhead.
+      summary: Configuration Status
+      parameters:
+      - in: query
+        name: configuration_id
+        schema:
+          type: string
+          format: uuid
+        description: Optional configuration id to retrieve. If not provided, the primary
+          configuration will be used.
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this report.
+        required: true
+      tags:
+      - Reports
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/{id}/download_dataset/:
+    get:
+      operationId: reports_download_dataset_retrieve
+      description: Download the computed, processed dataset as a CSV file.
+      summary: Download Dataset
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this report.
+        required: true
+      - in: query
+        name: mask_text_violations
+        schema:
+          type: boolean
+          default: true
+        description: Whether or not to mask text violations in the resulting CSV.
+      - in: query
+        name: omit_columns
+        schema:
+          type: string
+          default: ''
+        description: Comma-separated list of column names to omit from the resulting
+          CSV.
+      tags:
+      - Reports
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/{id}/entry_data/:
+    get:
+      operationId: reports_entry_data_list
+      description: Retrieves information on a field in the report's Entry data with
+        aggregation.
+      summary: Entry Data
+      parameters:
+      - in: query
+        name: aggregation_type
+        schema:
+          type: string
+          enum:
+          - average
+          - count
+          - max
+          - min
+          - sum
+        description: The type of aggregation to perform on the field. Any fields that
+          are STR values only support `count`.
+        required: true
+      - in: query
+        name: configuration_id
+        schema:
+          type: string
+          format: uuid
+        description: Optional configuration id to retrieve. If not provided, the primary
+          configuration will be used.
+      - in: query
+        name: fieldname
+        schema:
+          type: string
+        description: 'The field name to aggregate on. Ex: Gender, Occupation, involved,
+          ...'
+        required: true
+      - in: query
+        name: group_results
+        schema:
+          type: boolean
+          default: false
+        description: Whether to group the results or not.
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this report.
+        required: true
+      tags:
+      - Reports
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InlineReportEntryData'
+          description: ''
+  /api/v1/reports/{id}/filter/:
+    post:
+      operationId: reports_filter_create
+      summary: Filter
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this report.
+        required: true
+      tags:
+      - Reports
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportFilterInput'
+            examples:
+              SimpleRequestExample:
+                value:
+                  asynchronous: true
+                  configuration_id: 2a822a99-2ffd-459d-bf1f-5c0f187b90bc
+                  filters:
+                  - dataset_filterable_id: 6c58243e-f4ce-4295-abd8-d7d6df94996d
+                    value:
+                    - 55-64
+                    - 45-54
+                summary: Simple Request Example
+                description: Example required parameters (CF Client Example for report
+                  id 22108a33-6293-4f8e-9847-e2939d14196f )
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportSummary'
+          description: ''
+  /api/v1/reports/{id}/filterables/:
+    get:
+      operationId: reports_filterables_list
+      summary: Filterables
+      parameters:
+      - in: query
+        name: configuration_id
+        schema:
+          type: string
+          format: uuid
+        description: Optional configuration id to retrieve. If not provided, the primary
+          configuration will be used.
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this report.
+        required: true
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - Reports
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DatasetFilterable'
+          description: ''
+  /api/v1/reports/{id}/observations/:
+    get:
+      operationId: reports_observations_retrieve
+      description: |-
+        Retrieves information on all the report's filterables and the various calculations
+        done on their options that identify segments of interest.
+
+        The filterables returned are in a specific sort order:
+        1. has_presentable_calculations DESC (True->False)
+        2. is_noteworthy DESC (True->False)
+        3. largest_apex_delta DESC
+      summary: Observations
+      parameters:
+      - in: query
+        name: configuration_id
+        schema:
+          type: string
+          format: uuid
+        description: Optional configuration id to retrieve. If not provided, the primary
+          configuration will be used.
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this report.
+        required: true
+      tags:
+      - Reports
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ObservationsReport'
+          description: ''
+  /api/v1/reports/{id}/summary/:
+    get:
+      operationId: reports_summary_retrieve
+      summary: Summary
+      parameters:
+      - in: query
+        name: configuration_id
+        schema:
+          type: string
+          format: uuid
+        description: Optionally provide a specific configuration id to query
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this report.
+        required: true
+      tags:
+      - Reports
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportSummary'
+          description: ''
+  /api/v1/reports/{id}/summary/priority_composition/:
+    get:
+      operationId: reports_summary_priority_composition_retrieve
+      summary: Priority Composition
+      parameters:
+      - in: query
+        name: configuration_id
+        schema:
+          type: string
+          format: uuid
+        description: Optional configuration id to retrieve. If not provided, the primary
+          configuration will be used.
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this report.
+        required: true
+      tags:
+      - Reports
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/{id}/summary/topic_metadata_fields/:
+    get:
+      operationId: reports_summary_topic_metadata_fields_retrieve
+      description: Gets a list of all the metadata fields that are contained within
+        survey response data.
+      summary: Text Topic Metadata Fields
+      parameters:
+      - in: query
+        name: configuration_id
+        schema:
+          type: string
+          format: uuid
+        description: Optional configuration id to retrieve. If not provided, the primary
+          configuration will be used.
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this report.
+        required: true
+      tags:
+      - Reports
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/{id}/summary/topics/:
+    get:
+      operationId: reports_summary_topics_list
+      summary: Text Topics
+      parameters:
+      - in: query
+        name: configuration_id
+        schema:
+          type: string
+          format: uuid
+        description: Optional configuration id to retrieve. If not provided, the primary
+          configuration will be used.
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this report.
+        required: true
+      - in: query
+        name: issued_at_after
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: issued_at_before
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: mona_version__audience_type
+        schema:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          - 3
+          - 4
+          - 5
+        description: |-
+          * `0` - None
+          * `1` - Customers
+          * `2` - Employees
+          * `3` - Donors
+          * `4` - Media
+          * `5` - Gathering 2024 Lecturees
+      - in: query
+        name: name
+        schema:
+          type: string
+      - in: query
+        name: only_comparable
+        schema:
+          type: boolean
+        description: Set to true to only include Reports that are comparable at this
+          time (which excludes sample reports and those marked for non-comparison
+          or incomplete), and only their Configurations that are comparable and completed
+          with a result.
+      - in: query
+        name: only_key_focus_topics
+        schema:
+          type: boolean
+        description: Optional param to limit the results to only the top key focus
+          topics.
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: portfolio_id__in
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: tags
+        schema:
+          type: array
+          items:
+            type: string
+            nullable: true
+            enum:
+            - competitive
+            - industry
+            - none
+            - segment
+        description: |-
+          * `competitive` - Competitive
+          * `segment` - Segment
+          * `industry` - Industry
+          * `none` - None
+        explode: true
+        style: form
+      tags:
+      - Reports
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTextTopicList'
+          description: ''
+  /api/v1/reports/{id}/text_entries/:
+    get:
+      operationId: reports_text_entries_list
+      summary: Text Entries
+      parameters:
+      - in: query
+        name: attitude_names
+        schema:
+          type: array
+          items:
+            type: string
+        description: List of attitude names to filter by. Case-insensitive.
+      - in: query
+        name: configuration_id
+        schema:
+          type: string
+          format: uuid
+        description: Optional configuration id to retrieve. If not provided, the primary
+          configuration will be used.
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this report.
+        required: true
+      - in: query
+        name: only_analyzed
+        schema:
+          type: boolean
+          default: true
+        description: Only return analyzed text entries (where ref is not null).
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: per_page
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: sentiment
+        schema:
+          type: string
+          enum:
+          - any
+          - negative
+          - neutral
+          - positive
+      - in: query
+        name: starred
+        schema:
+          type: boolean
+        description: Filter by starred status.
+      - in: query
+        name: text_violation_flag
+        schema:
+          type: boolean
+        description: Set to true to include entries with a text violation flag. By
+          default, entries with a text violation flag are excluded.
+      - in: query
+        name: topic_ids
+        schema:
+          type: array
+          items:
+            type: string
+        description: Topic ids to filter by. Get applicable topic ids from the `summary/topics`
+          endpoint.
+      tags:
+      - Reports
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTextEntryList'
+          description: ''
+  /api/v1/reports/{id}/text_topics/sentiment_stats/:
+    get:
+      operationId: reports_text_topics_sentiment_stats_retrieve
+      summary: Text Topics Sentiment Stats
+      parameters:
+      - in: query
+        name: attitude_names
+        schema:
+          type: array
+          items:
+            type: string
+        description: List of attitude names to filter by. Case-insensitive.
+      - in: query
+        name: configuration_id
+        schema:
+          type: string
+          format: uuid
+        description: Optional configuration id to retrieve. If not provided, the primary
+          configuration will be used.
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this report.
+        required: true
+      tags:
+      - Reports
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/reports/compare/:
+    post:
+      operationId: reports_compare_create
+      description: |-
+        Use to compare several reports (or configurations) to each other. This endpoint will accept a list
+        of `report_id` which can also be mixed in with `configuration_id` values and return a data structure
+        that provides summary results and additional aggregate/change calculations to allow you to see data for
+        the items in a comparison.
+
+        If only one ID is provided, then the endpoint will try to make the comparison against the designated
+        industry_configuration. If this fails, then data is returned for the single item only with no comparison.
+
+        The schema and structure returned by this endpoint varies based on querystring parameters given.
+      summary: Compare
+      parameters:
+      - in: query
+        name: group_configurations_by
+        schema:
+          type: string
+          enum:
+          - issued_at
+          - portfolio
+        description: Group lists of comparison items by one of their fields. This
+          grouping is secondary to the `separate_portfolios` setting.
+      - in: query
+        name: only_latest
+        schema:
+          type: boolean
+          default: false
+        description: Set to true to only return the latest configuration in the resulting
+          data, for when you only care about the most recent results/comparison.
+      tags:
+      - Reports
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportCompareRequest'
+            examples:
+              SimpleRequest:
+                value:
+                  comparison_ids:
+                  - d561a959-7ee2-44c1-87ad-a497d5b51ee1
+                  - a9853aca-542d-4126-bb08-757da33a6b96
+                summary: Simple Request
+                description: A simple request to compare a report ID value and two
+                  configuration ID values.
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportCompareResponse'
+          description: ''
+  /api/v1/segments/:
+    get:
+      operationId: segments_list
+      summary: List
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: portfolio_id
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - Segments
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSegmentList'
+          description: ''
+    post:
+      operationId: segments_create
+      description: |-
+        Create a segment for a specified portfolio.
+
+        If configurations are provided, they will be added to the segment.
+        Any configurations passed that do not belong to the specified portfolio will be IGNORED.
+      summary: Create
+      tags:
+      - Segments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Segment'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Segment'
+          description: ''
+  /api/v1/segments/{id}/:
+    get:
+      operationId: segments_retrieve
+      summary: Retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this segment.
+        required: true
+      tags:
+      - Segments
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Segment'
+          description: ''
+    put:
+      operationId: segments_update
+      description: |-
+        Updates a segment.
+
+        If configurations are provided, they will be added to the segment.
+        Any configurations passed that do not belong to the specified portfolio will be IGNORED.
+      summary: Update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this segment.
+        required: true
+      tags:
+      - Segments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Segment'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Segment'
+          description: ''
+    patch:
+      operationId: segments_partial_update
+      description: |-
+        Updates a segment.
+
+        If configurations are provided, they will be added to the segment.
+        Any configurations passed that do not belong to the specified portfolio will be IGNORED.
+      summary: Partial Update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this segment.
+        required: true
+      tags:
+      - Segments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSegment'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Segment'
+          description: ''
+    delete:
+      operationId: segments_destroy
+      summary: Destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this segment.
+        required: true
+      tags:
+      - Segments
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/text_topic_theme_idea/:
+    post:
+      operationId: text_topic_theme_idea_create
+      summary: Create
+      tags:
+      - Text Topic Theme Idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TextTopicThemeIdea'
+            examples:
+              SimpleRequest:
+                value:
+                  text_topic_theme_id: cbd04970-efa7-400c-b645-baac76c5746b
+                summary: Simple Request
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TextTopicThemeIdea'
+              examples:
+                SimpleRequest:
+                  value:
+                    text_topic_theme_id: cbd04970-efa7-400c-b645-baac76c5746b
+                  summary: Simple Request
+          description: ''
+  /api/v1/text_topic_theme_idea/{id}/:
+    get:
+      operationId: text_topic_theme_idea_retrieve
+      summary: Retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Text Topic Theme Idea
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TextTopicThemeIdea'
+          description: ''
+    put:
+      operationId: text_topic_theme_idea_update
+      summary: Update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Text Topic Theme Idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TextTopicThemeIdea'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TextTopicThemeIdea'
+          description: ''
+    patch:
+      operationId: text_topic_theme_idea_partial_update
+      summary: Partial Update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - Text Topic Theme Idea
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTextTopicThemeIdea'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TextTopicThemeIdea'
+          description: ''
+  /api/v1/uploaded_datasets/:
+    post:
+      operationId: uploaded_datasets_create
+      summary: Create
+      tags:
+      - Datasets - Uploaded
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UploadedDatasetCreate'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Dataset'
+          description: ''
+  /api/v1/users/:
+    post:
+      operationId: users_create
+      description: Perform operations on the User resource.
+      summary: Create
+      tags:
+      - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreate'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+  /api/v1/users/{id}/:
+    put:
+      operationId: users_update
+      description: Perform operations on the User resource.
+      summary: Update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user.
+        required: true
+      tags:
+      - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: users_partial_update
+      description: Perform operations on the User resource.
+      summary: Partial Update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this user.
+        required: true
+      tags:
+      - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/users/me/:
+    get:
+      operationId: users_me_retrieve
+      description: Given the current token provided, return the current user.
+      summary: Me
+      tags:
+      - Users
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/versions/:
+    get:
+      operationId: versions_list
+      summary: List
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - Metadata/Versions
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVersionList'
+          description: ''
+components:
+  schemas:
+    Attachment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        file:
+          type: string
+          format: uri
+          readOnly: true
+        friendly_name:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+          nullable: true
+        configuration_id:
+          type: string
+          format: uuid
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        file_extension:
+          type: string
+          readOnly: true
+        file_size:
+          type: integer
+          readOnly: true
+        friendly_filetype:
+          type: string
+          description: |-
+            This method get_friendly_name first tries to match the MIME type to a friendly name.
+            If the MIME type is not available or not in the predefined list, it falls back to using the
+            file extension. You can expand the mime_to_name and ext_to_name dictionaries to include more
+            MIME types and extensions as needed.
+
+            Returns:
+                str: A friendly name for the file type
+          readOnly: true
+        mime_type:
+          type: string
+          readOnly: true
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+      required:
+      - configuration_id
+      - created_at
+      - created_by
+      - description
+      - file
+      - file_extension
+      - file_size
+      - friendly_filetype
+      - friendly_name
+      - id
+      - mime_type
+      - updated_at
+    Attitude:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        keyword:
+          type: string
+          maxLength: 50
+        description:
+          type: string
+          maxLength: 150
+        explanation:
+          type: string
+          maxLength: 500
+        content_icon_url:
+          type: string
+          nullable: true
+          maxLength: 250
+        content_recommendations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentRecommendationField'
+          readOnly: true
+        content_studies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentStudiesField'
+          readOnly: true
+        classification:
+          $ref: '#/components/schemas/ClassificationEnum'
+        ppp_classification:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/PppClassificationEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        meta: {}
+        mona_version:
+          allOf:
+          - $ref: '#/components/schemas/Version'
+          readOnly: true
+      required:
+      - classification
+      - content_recommendations
+      - content_studies
+      - description
+      - id
+      - keyword
+      - mona_version
+    AudienceFeeLanguageEnum:
+      enum:
+      - fees
+      - prices
+      type: string
+      description: |-
+        * `fees` - fees
+        * `prices` - prices
+    AudienceTypeEnum:
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      type: integer
+      description: |-
+        * `0` - None
+        * `1` - Customers
+        * `2` - Employees
+        * `3` - Donors
+        * `4` - Media
+        * `5` - Gathering 2024 Lecturees
+    AudienceTypeStrEnum:
+      enum:
+      - customers
+      - employees
+      - donors
+      - media
+      - gathering 2024 lecturees
+      type: string
+      description: |-
+        * `customers` - customers
+        * `employees` - employees
+        * `donors` - donors
+        * `media` - media
+        * `gathering 2024 lecturees` - gathering 2024 lecturees
+    BlankEnum:
+      enum:
+      - ''
+    BusinessTypeEnum:
+      enum:
+      - agency
+      - corporation
+      - ngo
+      type: string
+      description: |-
+        * `agency` - agency
+        * `corporation` - corporation
+        * `ngo` - ngo
+    ClassificationEnum:
+      enum:
+      - FE
+      - BL
+      - BH
+      - AD
+      - IN
+      type: string
+      description: |-
+        * `FE` - feelings
+        * `BL` - beliefs
+        * `BH` - behaviours
+        * `AD` - advocacy
+        * `IN` - intent
+    CommentRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        content_type:
+          type: string
+          maxLength: 25
+        commenter:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        object_id:
+          type: string
+          format: uuid
+        tag:
+          type: string
+          nullable: true
+          maxLength: 50
+        text:
+          type: string
+        parent:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - commenter
+      - content_type
+      - created_at
+      - id
+      - object_id
+      - updated_at
+    CommentWrite:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        content_type:
+          type: string
+          maxLength: 25
+        object_id:
+          type: string
+          format: uuid
+        tag:
+          type: string
+          nullable: true
+          maxLength: 50
+        text:
+          type: string
+        parent:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - content_type
+      - id
+      - object_id
+    ConfigCleanseStrategyEnum:
+      enum:
+      - none
+      - basic
+      type: string
+      description: |-
+        * `none` - none
+        * `basic` - basic
+    ContentPage:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        icon:
+          type: string
+          nullable: true
+          maxLength: 100
+        title:
+          type: string
+          maxLength: 255
+        created_by:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+      required:
+      - created_by
+      - id
+      - title
+    ContentRecommendationField:
+      type: object
+      properties:
+        header:
+          type: string
+        subtext:
+          type: string
+        example:
+          type: string
+        why:
+          type: string
+      required:
+      - example
+      - header
+      - subtext
+      - why
+    ContentStudiesField:
+      type: object
+      properties:
+        title:
+          type: string
+        link:
+          type: string
+          format: uri
+      required:
+      - link
+      - title
+    Dataset:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        report:
+          type: string
+          format: uuid
+          nullable: true
+        mona_version:
+          allOf:
+          - $ref: '#/components/schemas/Version'
+          readOnly: true
+        configurations:
+          allOf:
+          - $ref: '#/components/schemas/DatasetConfiguration'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - configurations
+      - created_at
+      - id
+      - mona_version
+      - updated_at
+    DatasetConfiguration:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        report_name:
+          type: string
+          readOnly: true
+        report_issued_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - id
+      - report_issued_at
+      - report_name
+    DatasetConfigurationFilter:
+      type: object
+      properties:
+        filterable:
+          $ref: '#/components/schemas/DatasetFilterable'
+        value: {}
+        operator:
+          type: string
+          maxLength: 10
+      required:
+      - filterable
+    DatasetConfigurationResult:
+      type: object
+      properties:
+        state:
+          allOf:
+          - $ref: '#/components/schemas/DatasetConfigurationResultStatus'
+          readOnly: true
+      required:
+      - state
+    DatasetConfigurationResultStatus:
+      type: object
+      properties:
+        status:
+          allOf:
+          - $ref: '#/components/schemas/DatasetConfigurationResultStatusStatusEnum'
+          readOnly: true
+        status_message:
+          type: string
+          readOnly: true
+          nullable: true
+        observations_data_pending:
+          type: string
+          readOnly: true
+        text_analysis_data_pending:
+          type: string
+          readOnly: true
+      required:
+      - observations_data_pending
+      - status
+      - status_message
+      - text_analysis_data_pending
+    DatasetConfigurationResultStatusStatusEnum:
+      enum:
+      - pending
+      - awaiting_relaimpo
+      - awaiting_review
+      - complete
+      - locked
+      - failed
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `awaiting_relaimpo` - Awaiting Relaimpo
+        * `awaiting_review` - Awaiting Review
+        * `complete` - Complete
+        * `locked` - Locked
+        * `failed` - Failed
+    DatasetFilterable:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 500
+      required:
+      - id
+    DirectionEnum:
+      enum:
+      - 1
+      - -1
+      - 0
+      type: integer
+      description: |-
+        * `1` - Increase
+        * `-1` - Decrease
+        * `0` - Neutral
+    DominantSentimentEnum:
+      enum:
+      - positive
+      - neutral
+      - negative
+      - any
+      type: string
+      description: |-
+        * `positive` - Positive
+        * `neutral` - Neutral
+        * `negative` - Negative
+        * `any` - Any
+    EntryMetaData:
+      type: object
+      properties:
+        response_id:
+          type: string
+          nullable: true
+          description: Used for import from any third party text analysis tool. We
+            use this value alongside the text to ensure we're matching the correct
+            Entry with the correct Third Party result.
+          maxLength: 100
+        metadata:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+      required:
+      - metadata
+    IndustriesEnum:
+      enum:
+      - agriculture
+      - construction
+      - digital_banking
+      - education
+      - energy
+      - entertainment
+      - financial_services
+      - food
+      - healthcare
+      - hospitality
+      - it_service
+      - manufacturing
+      - media_production
+      - mining
+      - not_for_profit
+      - pharmaceutical
+      - professional_services
+      - retail
+      - technology
+      - telecommunications
+      - transport
+      - other
+      type: string
+      description: |-
+        * `agriculture` - agriculture
+        * `construction` - construction
+        * `digital_banking` - digital_banking
+        * `education` - education
+        * `energy` - energy
+        * `entertainment` - entertainment
+        * `financial_services` - financial_services
+        * `food` - food
+        * `healthcare` - healthcare
+        * `hospitality` - hospitality
+        * `it_service` - it_service
+        * `manufacturing` - manufacturing
+        * `media_production` - media_production
+        * `mining` - mining
+        * `not_for_profit` - not_for_profit
+        * `pharmaceutical` - pharmaceutical
+        * `professional_services` - professional_services
+        * `retail` - retail
+        * `technology` - technology
+        * `telecommunications` - telecommunications
+        * `transport` - transport
+        * `other` - other
+    InlineOrganizationInvitationAccept200Response:
+      type: object
+      properties:
+        status:
+          type: string
+          default: accepted
+    InlineOrganizationInvitationAccept400Response:
+      type: object
+      properties:
+        detail:
+          type: string
+          default: A user with the invited email does not exist in the system. To
+            create a user, please pass user data with the request.
+    InlineOrganizationInvitationAccept404Response:
+      type: object
+      properties:
+        error:
+          type: string
+          default: Your invitation could not be found or has expired.
+    InlineOrganizationInvitationAcceptRequest:
+      type: object
+      properties:
+        token:
+          type: string
+          format: uuid
+      required:
+      - token
+    InlineOrganizationInvitationCreate200:
+      type: object
+      properties:
+        sent:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationInvitation'
+        failed:
+          type: array
+          items: {}
+          default: []
+      required:
+      - sent
+    InlineOrganizationInvitationCreate202:
+      type: object
+      properties:
+        sent:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationInvitation'
+        failed:
+          type: array
+          items:
+            $ref: '#/components/schemas/InlineOrganizationInvitationCreateFails'
+      required:
+      - failed
+      - sent
+    InlineOrganizationInvitationCreateFails:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        reason:
+          type: string
+      required:
+      - email
+      - reason
+    InlineOrganizationInvitationValidateTokenFailureResponse:
+      type: object
+      properties:
+        is_valid:
+          type: boolean
+          default: false
+    InlineOrganizationInvitationValidateTokenSuccessResponse:
+      type: object
+      properties:
+        is_valid:
+          type: boolean
+        organization_name:
+          type: string
+        user:
+          $ref: '#/components/schemas/InlineValidateTokenSuccessUser'
+      required:
+      - is_valid
+      - organization_name
+      - user
+    InlineReportEntryData:
+      type: object
+      properties:
+        group_value:
+          type: string
+        aggregated_value:
+          type: number
+          format: double
+      required:
+      - aggregated_value
+      - group_value
+    InlineValidateTokenSuccessUser:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+      - email
+    Login:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - password
+      - username
+    LoginResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        token:
+          type: string
+          readOnly: true
+        organizations:
+          type: string
+          readOnly: true
+        password:
+          type: string
+          maxLength: 128
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+        is_superuser:
+          type: boolean
+          title: Superuser status
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+        is_staff:
+          type: boolean
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        is_active:
+          type: boolean
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+        date_joined:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 255
+        first_name:
+          type: string
+          nullable: true
+          maxLength: 50
+        last_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        groups:
+          type: array
+          items:
+            type: integer
+          description: The groups this user belongs to. A user will get all permissions
+            granted to each of their groups.
+        user_permissions:
+          type: array
+          items:
+            type: integer
+          description: Specific permissions for this user.
+      required:
+      - created_at
+      - email
+      - id
+      - organizations
+      - password
+      - token
+      - updated_at
+    Metric:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        direction:
+          allOf:
+          - $ref: '#/components/schemas/DirectionEnum'
+          description: |-
+            The desired direction of the metric (ex: Churn is -1 decrease, Revenue is 1 increase).
+
+            * `1` - Increase
+            * `-1` - Decrease
+            * `0` - Neutral
+          minimum: -2147483648
+          maximum: 2147483647
+        unit:
+          type: string
+          nullable: true
+          description: 'The unit of measurement for the metric (ex: $, %, etc).'
+          maxLength: 20
+        description:
+          type: string
+          nullable: true
+          maxLength: 255
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricValue'
+          readOnly: true
+      required:
+      - name
+      - values
+    MetricValue:
+      type: object
+      properties:
+        value_str:
+          type: string
+          readOnly: true
+        issued_at:
+          type: string
+          format: date-time
+          description: The date the metric value was recorded.
+        percentage_change:
+          type: number
+          format: double
+          maximum: 10000
+          minimum: -10000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          description: The percentage change between this value and the previous value
+            based on issued_at.
+        description:
+          type: string
+          nullable: true
+          description: 'A description of the metric value (ex: ''This is the highest
+            value we''ve ever recorded''). Respects HTML tags.'
+      required:
+      - value_str
+    NullEnum:
+      enum:
+      - null
+    ObservationsDataset:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        configuration:
+          allOf:
+          - $ref: '#/components/schemas/ObservationsDatasetConfiguration'
+          readOnly: true
+      required:
+      - configuration
+      - id
+    ObservationsDatasetConfiguration:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        is_primary:
+          type: boolean
+        name:
+          type: string
+          description: Choose a name for this set to refer to
+          maxLength: 250
+        result:
+          $ref: '#/components/schemas/DatasetConfigurationResult'
+        filterables:
+          type: array
+          items:
+            $ref: '#/components/schemas/ObservationsDatasetFilterable'
+          readOnly: true
+      required:
+      - filterables
+      - id
+      - result
+    ObservationsDatasetFilterable:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 500
+        content:
+          type: string
+          readOnly: true
+        is_noteworthy:
+          type: boolean
+          description: |-
+            Determines whether or not the apex calculations for all the options of this filterable
+            are noteworthy, in that there is a difference of at least settings.MONA_MINIMUM_FILTERABLE_CALCULATION_NOTEWORTHY_DELTA
+            between the MIN and MAX apex scores.
+          readOnly: true
+        has_presentable_calculations:
+          type: boolean
+        largest_apex_delta:
+          type: number
+          format: double
+          maximum: 10000
+          minimum: -10000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/ObservationsDatasetFilterableCalculation'
+      required:
+      - content
+      - has_presentable_calculations
+      - is_noteworthy
+      - largest_apex_delta
+      - options
+    ObservationsDatasetFilterableCalculation:
+      type: object
+      properties:
+        display:
+          type: string
+        value:
+          type: string
+        apex_score:
+          type: number
+          format: double
+          maximum: 10000
+          minimum: -10000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+        sample_size:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        content:
+          type: string
+          readOnly: true
+        option_display_order:
+          type: integer
+          maximum: 2147483647
+          minimum: 1
+          description: Override the order in which this filterable should be displayed
+            in the UI.
+      required:
+      - apex_score
+      - content
+      - display
+      - value
+    ObservationsReport:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        dataset:
+          allOf:
+          - $ref: '#/components/schemas/ObservationsDataset'
+          readOnly: true
+      required:
+      - dataset
+      - id
+      - name
+    Organization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+          maxLength: 100
+      required:
+      - id
+    OrganizationInvitation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        token:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Token is used to validate the invitation.
+        expiry_date:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Date is calculated in save().
+        status:
+          allOf:
+          - $ref: '#/components/schemas/OrganizationInvitationStatusEnum'
+          description: |-
+            Status of the invitation, default status is pending.
+
+            * `0` - pending
+            * `1` - accepted
+            * `2` - cancelled
+            * `3` - expired
+            * `4` - revoked
+          minimum: -2147483648
+          maximum: 2147483647
+        organization:
+          allOf:
+          - $ref: '#/components/schemas/Organization'
+          readOnly: true
+        organization_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        inviter_member:
+          allOf:
+          - $ref: '#/components/schemas/OrganizationMember'
+          readOnly: true
+        email:
+          type: string
+          format: email
+          title: Email address
+          description: Invitee's email address.
+          maxLength: 255
+        first_name:
+          type: string
+          nullable: true
+          description: Invitee's first name.
+          maxLength: 25
+        last_name:
+          type: string
+          nullable: true
+          description: Invitee's last name.
+          maxLength: 25
+        email_sent:
+          type: boolean
+          readOnly: true
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          description: |-
+            Invitee's role, default role is member.
+
+            * `0` - member
+            * `1` - collaborator
+            * `2` - administrator
+          minimum: -2147483648
+          maximum: 2147483647
+        accessible_portfolios:
+          type: array
+          items:
+            $ref: '#/components/schemas/Portfolio'
+          readOnly: true
+        accessible_portfolio_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          writeOnly: true
+      required:
+      - accessible_portfolios
+      - email
+      - email_sent
+      - expiry_date
+      - id
+      - inviter_member
+      - organization
+      - organization_id
+      - token
+    OrganizationInvitationStatusEnum:
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      type: integer
+      description: |-
+        * `0` - pending
+        * `1` - accepted
+        * `2` - cancelled
+        * `3` - expired
+        * `4` - revoked
+    OrganizationMember:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        first_name:
+          type: string
+          readOnly: true
+        last_name:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+      required:
+      - email
+      - first_name
+      - id
+      - last_name
+    PaginatedAttitudeList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attitude'
+    PaginatedCommentReadList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CommentRead'
+    PaginatedOrganizationInvitationList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationInvitation'
+    PaginatedOrganizationList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+    PaginatedOrganizationMemberList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationMember'
+    PaginatedPortfolioDocumentList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PortfolioDocument'
+    PaginatedPortfolioList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Portfolio'
+    PaginatedRankList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rank'
+    PaginatedSegmentList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Segment'
+    PaginatedTextEntryList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TextEntry'
+    PaginatedTextTopicList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TextTopic'
+    PaginatedVersionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Version'
+    PatchedCommentWrite:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        content_type:
+          type: string
+          maxLength: 25
+        object_id:
+          type: string
+          format: uuid
+        tag:
+          type: string
+          nullable: true
+          maxLength: 50
+        text:
+          type: string
+        parent:
+          type: string
+          format: uuid
+          nullable: true
+    PatchedOrganization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+          maxLength: 100
+        business_type:
+          $ref: '#/components/schemas/BusinessTypeEnum'
+        owner:
+          type: string
+          readOnly: true
+        website:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        primary_contact_phone:
+          type: string
+          nullable: true
+          maxLength: 31
+        needs:
+          type: array
+          items:
+            type: string
+            maxLength: 255
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        abilities:
+          type: string
+          readOnly: true
+        portfolios:
+          type: string
+          readOnly: true
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+          readOnly: true
+        members:
+          type: string
+          readOnly: true
+    PatchedOrganizationInvitation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        token:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Token is used to validate the invitation.
+        expiry_date:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Date is calculated in save().
+        status:
+          allOf:
+          - $ref: '#/components/schemas/OrganizationInvitationStatusEnum'
+          description: |-
+            Status of the invitation, default status is pending.
+
+            * `0` - pending
+            * `1` - accepted
+            * `2` - cancelled
+            * `3` - expired
+            * `4` - revoked
+          minimum: -2147483648
+          maximum: 2147483647
+        organization:
+          allOf:
+          - $ref: '#/components/schemas/Organization'
+          readOnly: true
+        organization_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        inviter_member:
+          allOf:
+          - $ref: '#/components/schemas/OrganizationMember'
+          readOnly: true
+        email:
+          type: string
+          format: email
+          title: Email address
+          description: Invitee's email address.
+          maxLength: 255
+        first_name:
+          type: string
+          nullable: true
+          description: Invitee's first name.
+          maxLength: 25
+        last_name:
+          type: string
+          nullable: true
+          description: Invitee's last name.
+          maxLength: 25
+        email_sent:
+          type: boolean
+          readOnly: true
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          description: |-
+            Invitee's role, default role is member.
+
+            * `0` - member
+            * `1` - collaborator
+            * `2` - administrator
+          minimum: -2147483648
+          maximum: 2147483647
+        accessible_portfolios:
+          type: array
+          items:
+            $ref: '#/components/schemas/Portfolio'
+          readOnly: true
+        accessible_portfolio_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          writeOnly: true
+    PatchedOrganizationMember:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        is_active:
+          type: boolean
+        user_id:
+          type: string
+          format: uuid
+          readOnly: true
+        first_name:
+          type: string
+          readOnly: true
+        last_name:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+        organization:
+          $ref: '#/components/schemas/Organization'
+        accessible_portfolios:
+          type: array
+          items:
+            $ref: '#/components/schemas/Portfolio'
+          readOnly: true
+        originator:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedPortfolio:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+        organization:
+          allOf:
+          - $ref: '#/components/schemas/Organization'
+          readOnly: true
+        organization_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        survey_config_confirmed:
+          type: boolean
+          default: false
+        audience_fee_language:
+          allOf:
+          - $ref: '#/components/schemas/AudienceFeeLanguageEnum'
+          writeOnly: true
+        audience_interacts_with_staff:
+          type: boolean
+          writeOnly: true
+        audience_pays_directly:
+          type: boolean
+          writeOnly: true
+        audience_type_str:
+          $ref: '#/components/schemas/AudienceTypeStrEnum'
+        audience_type:
+          type: integer
+          readOnly: true
+        purpose:
+          allOf:
+          - $ref: '#/components/schemas/PurposeEnum'
+          description: |-
+            A value determining the intended purpose of the portfolio. Is this for yourself, or for a client?
+
+            * `organization` - My Organization
+            * `client` - Client
+            * `secondary_brand` - Secondary Brand
+        color_primary:
+          type: string
+        industries:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndustriesEnum'
+        logo:
+          type: string
+          format: uri
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        main_aggregate_report_id:
+          type: string
+          readOnly: true
+        report_tags:
+          type: string
+          readOnly: true
+        metrics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Metric'
+          readOnly: true
+        upload_data_flag:
+          type: boolean
+          readOnly: true
+        allow_aggregate_flag:
+          type: boolean
+          readOnly: true
+        allow_chat_flag:
+          type: boolean
+          readOnly: true
+    PatchedSegment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+        portfolio:
+          allOf:
+          - $ref: '#/components/schemas/Portfolio'
+          readOnly: true
+        portfolio_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        configurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetConfiguration'
+          readOnly: true
+        configuration_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+          writeOnly: true
+    PatchedSurvey:
+      type: object
+      description: |-
+        This serializer is mostly built within the Survey.to_serializer() method
+        because it is NOT a model serializer and its properties are set menually
+        by that controlling object.
+
+        The serializer allows READ on many properties including the JSON representation of the survey.
+        It also allows WRITE on some of the portfolio properties that influence the survey structure.
+
+        __If you make changes to the fields here, you should also look
+        at the Survey.get_serializer_data() method to see if you need to update that as well__
+      properties:
+        mona_version:
+          allOf:
+          - $ref: '#/components/schemas/Version'
+          readOnly: true
+        apex_questions:
+          type: array
+          items:
+            type: string
+            maxLength: 1000
+          readOnly: true
+        survey_brand_name:
+          type: string
+          readOnly: true
+          maxLength: 200
+        audience_fee_language:
+          $ref: '#/components/schemas/AudienceFeeLanguageEnum'
+        audience_interacts_with_staff:
+          type: boolean
+        audience_pays_directly:
+          type: boolean
+        audience_type:
+          type: integer
+          readOnly: true
+        audience_type_str:
+          $ref: '#/components/schemas/AudienceTypeStrEnum'
+        survey_config_confirmed:
+          type: boolean
+        survey_override_brand_name:
+          type: string
+          maxLength: 200
+    PatchedTextTopicThemeIdea:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        text:
+          type: string
+          nullable: true
+        is_helpful:
+          type: boolean
+          nullable: true
+        text_topic_theme_id:
+          type: string
+          format: uuid
+    PatchedUser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        full_name:
+          type: string
+          maxLength: 250
+        organization_members:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationMember'
+        pending_invitations:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationInvitation'
+          readOnly: true
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+        is_active:
+          type: boolean
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+        date_joined:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 255
+        first_name:
+          type: string
+          nullable: true
+          maxLength: 50
+        last_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        user_permissions:
+          type: array
+          items:
+            type: integer
+          description: Specific permissions for this user.
+    Portfolio:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+      required:
+      - id
+    PortfolioDocument:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        pdf_file:
+          type: string
+          format: uri
+        is_visible:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - pdf_file
+      - title
+      - updated_at
+    PppClassificationEnum:
+      enum:
+      - NA
+      - PE
+      - PR
+      - PU
+      type: string
+      description: |-
+        * `NA` - na
+        * `PE` - people
+        * `PR` - product
+        * `PU` - purpose
+    PurposeEnum:
+      enum:
+      - organization
+      - client
+      - secondary_brand
+      type: string
+      description: |-
+        * `organization` - My Organization
+        * `client` - Client
+        * `secondary_brand` - Secondary Brand
+    Rank:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 25
+        description:
+          type: string
+        minimum_differential:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          description: The minimum difference (%) between a segment's score and potential
+            score needed to qualify for this rank, expressed as percentage
+        audience_type:
+          type: integer
+        mona_version:
+          type: integer
+      required:
+      - audience_type
+      - description
+      - id
+      - minimum_differential
+      - mona_version
+      - name
+    Report:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+        issued_at:
+          type: string
+          format: date-time
+        survey_start_date:
+          type: string
+          format: date
+        survey_end_date:
+          type: string
+          format: date
+      required:
+      - id
+      - name
+    ReportCompareConfigurationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: Choose a name for this set to refer to
+          maxLength: 250
+        is_primary:
+          type: boolean
+        portfolio:
+          $ref: '#/components/schemas/Portfolio'
+        report:
+          $ref: '#/components/schemas/Report'
+        mona_version:
+          $ref: '#/components/schemas/Version'
+        compared_with_configuration:
+          allOf:
+          - $ref: '#/components/schemas/DatasetConfiguration'
+          readOnly: true
+        result:
+          allOf:
+          - $ref: '#/components/schemas/ReportCompareConfigurationResultResponse'
+          readOnly: true
+      required:
+      - compared_with_configuration
+      - id
+      - mona_version
+      - portfolio
+      - report
+      - result
+    ReportCompareConfigurationResultResponse:
+      type: object
+      properties:
+        apex_score:
+          type: number
+          format: double
+          maximum: 1000000
+          minimum: -1000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+        potential_apex_score:
+          type: number
+          format: double
+          maximum: 1000000
+          minimum: -1000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+        population_size:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+          description: The total number of respondents. Will be auto-populated or
+            overwritten.
+        rank:
+          $ref: '#/components/schemas/Rank'
+        opportunity_driver_categories:
+          type: string
+          readOnly: true
+        fba:
+          type: string
+          readOnly: true
+        ppp:
+          type: string
+          readOnly: true
+        benchmark:
+          type: object
+          additionalProperties: {}
+        attitudes:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+      required:
+      - apex_score
+      - attitudes
+      - benchmark
+      - fba
+      - opportunity_driver_categories
+      - potential_apex_score
+      - ppp
+      - rank
+    ReportCompareRequest:
+      type: object
+      description: |-
+        The REQUEST serializer that takes a list of either Report IDs or Configuration IDs to compare.
+
+        The serializer preps all the objects to be compared and stores them in the `configurations` field.
+      properties:
+        comparison_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Specify either Report IDs or Configuration IDs that should
+            be used in the comparison. If an ID passed does not exist or the user
+            does not have access, it will be ignored from the comparison.
+        save_name:
+          type: string
+      required:
+      - comparison_ids
+    ReportCompareResponse:
+      type: object
+      description: |-
+        This serializer represents the parent container and information for all configurations that are being
+        compared.
+
+        It will contain some over-arching data about the comparison and then a list of `ReportCompareConfigurationResponseSerializer`
+      properties:
+        portfolio:
+          $ref: '#/components/schemas/Portfolio'
+        configurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportCompareConfigurationResponse'
+          readOnly: true
+          description: 'If a group_by is requested, this field will be returned as
+            a dictionary of `groupby_key: [ReportCompareConfigurationResponseSerializer]`
+            instead of a flat list.'
+        largest_apex_reached:
+          type: string
+          readOnly: true
+        avg_attitude_importance:
+          type: string
+          readOnly: true
+        avg_attitude_performance:
+          type: string
+          readOnly: true
+      required:
+      - avg_attitude_importance
+      - avg_attitude_performance
+      - configurations
+      - largest_apex_reached
+    ReportFilterInput:
+      type: object
+      properties:
+        configuration_id:
+          type: string
+          format: uuid
+        asynchronous:
+          type: boolean
+          default: false
+        use_cache:
+          type: boolean
+          default: true
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportFilterInputItem'
+      required:
+      - configuration_id
+      - filters
+    ReportFilterInputItem:
+      type: object
+      properties:
+        dataset_filterable_id:
+          type: string
+          format: uuid
+        value:
+          type: array
+          items: {}
+      required:
+      - dataset_filterable_id
+      - value
+    ReportSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        tags:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/TagsEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        issued_at:
+          type: string
+          format: date-time
+        mona_version:
+          allOf:
+          - $ref: '#/components/schemas/Version'
+          readOnly: true
+        comments:
+          type: string
+          readOnly: true
+        dataset:
+          allOf:
+          - $ref: '#/components/schemas/ReportSummaryDataset'
+          readOnly: true
+        meta:
+          nullable: true
+      required:
+      - comments
+      - dataset
+      - id
+      - mona_version
+      - name
+    ReportSummaryAttitude:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        attitude_id:
+          type: string
+          format: uuid
+          readOnly: true
+        keyword:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        explanation:
+          type: string
+          readOnly: true
+        classification:
+          allOf:
+          - $ref: '#/components/schemas/ClassificationEnum'
+          readOnly: true
+        ppp_classification:
+          nullable: true
+          readOnly: true
+          oneOf:
+          - $ref: '#/components/schemas/PppClassificationEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        seol:
+          type: string
+          readOnly: true
+        performance_rebased:
+          type: number
+          format: double
+          maximum: 10000
+          minimum: -10000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+        importance_rebased:
+          type: number
+          format: double
+          maximum: 10000
+          minimum: -10000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+        performance_order:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        importance_order:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        performance_agreed:
+          type: number
+          format: double
+          maximum: 1000000
+          minimum: -1000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+        importance_agreed:
+          type: number
+          format: double
+          maximum: 1000000
+          minimum: -1000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+        fulfillment_balance:
+          type: number
+          format: double
+          maximum: 1000000
+          minimum: -1000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+        fulfillment_ratio:
+          type: number
+          format: double
+          maximum: 1000000
+          minimum: -1000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+        content_icon_url:
+          type: string
+          nullable: true
+          readOnly: true
+        comments:
+          allOf:
+          - $ref: '#/components/schemas/ReportSummaryAttitudeComment'
+          readOnly: true
+        content_recommendations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentRecommendationField'
+        content_studies:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentStudiesField'
+      required:
+      - attitude_id
+      - classification
+      - comments
+      - content_icon_url
+      - content_recommendations
+      - content_studies
+      - description
+      - explanation
+      - fulfillment_balance
+      - fulfillment_ratio
+      - id
+      - importance_agreed
+      - importance_rebased
+      - keyword
+      - performance_agreed
+      - performance_rebased
+      - ppp_classification
+      - seol
+    ReportSummaryAttitudeComment:
+      type: object
+      properties:
+        count:
+          type: integer
+        commenters:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportSummaryAttitudeCommentCommenters'
+      required:
+      - commenters
+      - count
+    ReportSummaryAttitudeCommentCommenters:
+      type: object
+      properties:
+        full_name:
+          type: string
+      required:
+      - full_name
+    ReportSummaryConfiguration:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          description: Choose a name for this set to refer to
+          maxLength: 250
+        is_primary:
+          type: boolean
+        copied_from:
+          type: string
+          format: uuid
+          nullable: true
+        industry_configuration:
+          type: string
+          format: uuid
+          nullable: true
+          description: The corresponding industry configuration that can be used to
+            benchmark against.
+        comments:
+          type: string
+          readOnly: true
+        content_pages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ContentPage'
+          readOnly: true
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetConfigurationFilter'
+        result:
+          allOf:
+          - $ref: '#/components/schemas/ReportSummaryResult'
+          readOnly: true
+        filterables:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetFilterable'
+          readOnly: true
+      required:
+      - comments
+      - content_pages
+      - filterables
+      - filters
+      - id
+      - result
+    ReportSummaryDataset:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        configurations:
+          allOf:
+          - $ref: '#/components/schemas/ReportSummaryConfiguration'
+          readOnly: true
+      required:
+      - configurations
+      - id
+    ReportSummaryResult:
+      type: object
+      properties:
+        state:
+          allOf:
+          - $ref: '#/components/schemas/DatasetConfigurationResultStatus'
+          readOnly: true
+        apex_score:
+          type: number
+          format: double
+          maximum: 1000000
+          minimum: -1000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+        potential_apex_score:
+          type: number
+          format: double
+          maximum: 1000000
+          minimum: -1000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+        value_boxes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValueBox'
+        population_size:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+          description: The total number of respondents. Will be auto-populated or
+            overwritten.
+        rank:
+          $ref: '#/components/schemas/Rank'
+        opportunity_driver_categories:
+          type: object
+          additionalProperties: {}
+        fba:
+          type: object
+          additionalProperties: {}
+        ppp:
+          type: object
+          additionalProperties: {}
+        analyses:
+          type: object
+          additionalProperties: {}
+        benchmark:
+          type: object
+          additionalProperties: {}
+        misc:
+          type: object
+          additionalProperties: {}
+        attitudes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportSummaryAttitude'
+          readOnly: true
+      required:
+      - analyses
+      - apex_score
+      - attitudes
+      - benchmark
+      - fba
+      - misc
+      - opportunity_driver_categories
+      - potential_apex_score
+      - ppp
+      - rank
+      - state
+      - value_boxes
+    RoleEnum:
+      enum:
+      - 0
+      - 1
+      - 2
+      type: integer
+      description: |-
+        * `0` - member
+        * `1` - collaborator
+        * `2` - administrator
+    Segment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+        portfolio:
+          allOf:
+          - $ref: '#/components/schemas/Portfolio'
+          readOnly: true
+        portfolio_id:
+          type: string
+          format: uuid
+          writeOnly: true
+        configurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetConfiguration'
+          readOnly: true
+        configuration_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+            writeOnly: true
+          writeOnly: true
+      required:
+      - configurations
+      - id
+      - name
+      - portfolio
+      - portfolio_id
+    SentimentOverallEnum:
+      enum:
+      - positive
+      - neutral
+      - negative
+      - any
+      type: string
+      description: |-
+        * `positive` - Positive
+        * `neutral` - Neutral
+        * `negative` - Negative
+        * `any` - Any
+    Subscription:
+      type: object
+      properties:
+        starts_on:
+          type: string
+          format: date
+          description: The date the subscription begins to be valid.
+        expires_on:
+          type: string
+          format: date
+          description: The last day of the subscription being valid, inclusive. The
+            day AFTER this day, the subscription will be considered expired.
+        is_started:
+          type: boolean
+          readOnly: true
+        is_expired:
+          type: boolean
+          readOnly: true
+        abilities:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+      required:
+      - abilities
+      - is_expired
+      - is_started
+    Survey:
+      type: object
+      description: |-
+        This serializer is mostly built within the Survey.to_serializer() method
+        because it is NOT a model serializer and its properties are set menually
+        by that controlling object.
+
+        The serializer allows READ on many properties including the JSON representation of the survey.
+        It also allows WRITE on some of the portfolio properties that influence the survey structure.
+
+        __If you make changes to the fields here, you should also look
+        at the Survey.get_serializer_data() method to see if you need to update that as well__
+      properties:
+        mona_version:
+          allOf:
+          - $ref: '#/components/schemas/Version'
+          readOnly: true
+        apex_questions:
+          type: array
+          items:
+            type: string
+            maxLength: 1000
+          readOnly: true
+        survey_brand_name:
+          type: string
+          readOnly: true
+          maxLength: 200
+        audience_fee_language:
+          $ref: '#/components/schemas/AudienceFeeLanguageEnum'
+        audience_interacts_with_staff:
+          type: boolean
+        audience_pays_directly:
+          type: boolean
+        audience_type:
+          type: integer
+          readOnly: true
+        audience_type_str:
+          $ref: '#/components/schemas/AudienceTypeStrEnum'
+        survey_config_confirmed:
+          type: boolean
+        survey_override_brand_name:
+          type: string
+          maxLength: 200
+      required:
+      - apex_questions
+      - audience_type
+      - mona_version
+      - survey_brand_name
+    TagsEnum:
+      enum:
+      - competitive
+      - segment
+      - industry
+      type: string
+      description: |-
+        * `competitive` - Competitive
+        * `segment` - Segment
+        * `industry` - Industry
+    TextEntry:
+      type: object
+      properties:
+        text:
+          type: string
+        entry:
+          allOf:
+          - $ref: '#/components/schemas/EntryMetaData'
+          readOnly: true
+        sentiment_overall:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SentimentOverallEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        topics:
+          type: string
+          readOnly: true
+        starred:
+          type: boolean
+        text_violation_flag:
+          type: boolean
+      required:
+      - entry
+      - text
+      - topics
+    TextTopic:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        key_focus_priority_order:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        key_focus_attitudes:
+          type: string
+          readOnly: true
+        dominant_sentiment:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/DominantSentimentEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        themes:
+          type: array
+          items:
+            $ref: '#/components/schemas/TextTopicTheme'
+          readOnly: true
+        category:
+          type: string
+          nullable: true
+          maxLength: 250
+        topic:
+          type: string
+          maxLength: 250
+      required:
+      - id
+      - key_focus_attitudes
+      - name
+      - themes
+      - topic
+    TextTopicTheme:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          nullable: true
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        idea_id:
+          type: string
+          format: uuid
+          readOnly: true
+      required:
+      - id
+      - idea_id
+      - name
+    TextTopicThemeIdea:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        text:
+          type: string
+          nullable: true
+        is_helpful:
+          type: boolean
+          nullable: true
+        text_topic_theme_id:
+          type: string
+          format: uuid
+      required:
+      - id
+      - text_topic_theme_id
+    UploadedDatasetCreate:
+      type: object
+      properties:
+        portfolio_id:
+          type: string
+          format: uuid
+        report_name:
+          type: string
+        file:
+          type: string
+          format: uri
+        config_results_require_review:
+          type: boolean
+        config_cleanse_strategy:
+          $ref: '#/components/schemas/ConfigCleanseStrategyEnum'
+        config_extract_filterables_definition:
+          type: string
+        config_filter_query:
+          type: string
+        config_omit_attitudes:
+          type: string
+      required:
+      - file
+      - portfolio_id
+      - report_name
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        full_name:
+          type: string
+          maxLength: 250
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 255
+        first_name:
+          type: string
+          nullable: true
+          maxLength: 50
+        last_name:
+          type: string
+          nullable: true
+          maxLength: 100
+      required:
+      - email
+      - full_name
+      - id
+    UserCreate:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 255
+        password:
+          type: string
+          writeOnly: true
+        confirm_password:
+          type: string
+          writeOnly: true
+        first_name:
+          type: string
+          nullable: true
+          maxLength: 50
+        last_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        full_name:
+          type: string
+          writeOnly: true
+          description: Optional field to pass a full name string instead of both first_name
+            and last_name
+      required:
+      - confirm_password
+      - email
+      - id
+      - password
+    ValueBox:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          description: 'Ex: ''Annual Churn Reduction'', or ''Incremental Revenue'''
+          maxLength: 255
+        value:
+          type: string
+          nullable: true
+          description: 'Ex: ''3.2%'' or ''$1,000,000'''
+          maxLength: 255
+        icon:
+          type: string
+          nullable: true
+          maxLength: 100
+        impact_description:
+          type: string
+          nullable: true
+          description: 'Ex: Impact Per Apex Point'
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+          description: 'Ex: ''This is the annual churn reduction we expect to see
+            from this initiative.'''
+    Verification:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        verification_code:
+          type: string
+          pattern: ^\d{4}$
+          maxLength: 4
+      required:
+      - id
+      - verification_code
+    Version:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        audience:
+          type: string
+        audience_type:
+          allOf:
+          - $ref: '#/components/schemas/AudienceTypeEnum'
+          default: 1
+          minimum: -2147483648
+          maximum: 2147483647
+        sequence:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - audience
+      - id
+      - name
+      - sequence
+  securitySchemes:
+    tokenAuth:
+      type: http
+      scheme: bearer
+servers:
+- url: https://api.main.apexscore.ai
