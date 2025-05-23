@@ -36,11 +36,17 @@
               "product/motivemodel",
               "product/motivepath",
               "product/motiveloop",
-              "product/platform",
-              "product/integrations"
+              "product/platform"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "integrations/ea_prizm",
+              "integrations/niq",
+              "integrations/dynamicyield"
             ]
           }
-          
         ]
       },
       {
@@ -64,6 +70,11 @@
     ],
     "global": {
       "anchors": [
+        {
+          "anchor": "Contact Us",
+          "href": "https://apexscore.ai/contact",
+          "icon": "envelope"
+        },
         {
           "anchor": "Case Studies",
           "href": "https://apexscore.ai/case-studies",
