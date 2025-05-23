@@ -1,0 +1,162 @@
+.card.block h2 {
+    padding-bottom:10px;
+}
+
+.motivator {
+display: inline-flex;
+align-items: center;
+box-sizing: border-box;
+padding: 0.2em 0.5em;
+border-radius: 7px;
+font-weight: bold;
+}
+.motivator::before {
+content: "";
+flex-shrink: 0;
+left: 0.4em;
+width: 1.6em;
+height: 1.6em;
+background-size: contain;
+background-repeat: no-repeat;
+margin-right: 0.4em;
+}
+
+/* RATIONALS (blue) */
+
+.motivator-uncomplicated {
+    border: 1px solid #a2bfe6;
+    /* color: #a2bfe6; */
+}
+.motivator-uncomplicated::before {
+    background-image: url("/images/motivators/uncomplicated_back-rational.svg");
+}
+
+.motivator-responsive {
+    border: 1px solid #a2bfe6;
+    /* color: #a2bfe6; */
+}
+.motivator-responsive::before {
+    background-image: url("/images/motivators/responsive_back-rational.svg");
+}
+
+.motivator-predictable {
+    border: 1px solid #a2bfe6;
+    /* color: #a2bfe6; */
+}
+.motivator-predictable::before {
+    background-image: url("/images/motivators/predictable_back-rational.svg");
+}
+
+.motivator-meaningful {
+    border: 1px solid #a2bfe6;
+    /* color: #a2bfe6; */
+}
+.motivator-meaningful::before {
+    background-image: url("/images/motivators/meaningful_back-rational.svg");
+}
+
+.motivator-involved {
+    border: 1px solid #a2bfe6;
+    /* color: #a2bfe6; */
+}
+.motivator-involved::before {
+    background-image: url("/images/motivators/involved_back-rational.svg");
+}
+
+.motivator-forward-thinking {
+    border: 1px solid #a2bfe6;
+    /* color: #a2bfe6; */
+}
+.motivator-forward-thinking::before {
+    background-image: url("/images/motivators/forward-thinking_back-rational.svg");
+}
+
+.motivator-distinct {
+    border: 1px solid #a2bfe6;
+    /* color: #a2bfe6; */
+}
+.motivator-distinct::before {
+    background-image: url("/images/motivators/distinct_back-rational.svg");
+}
+
+/* Afforable and Valuable	 */
+.motivator-affordable {
+    border: 1px solid #a2bfe6;
+    /* color: #a2bfe6; */
+}
+.motivator-affordable::before {
+    background-image: url("/images/motivators/affordable_back-rational.svg");
+}
+.motivator-valuable {
+    border: 1px solid #a2bfe6;
+    /* color: #a2bfe6; */
+}
+.motivator-valuable::before {
+    background-image: url("/images/motivators/affordable_back-rational.svg");
+}
+
+/* ======================== EMOTIONAL ======================== */
+
+.motivator-respectful {
+    border: 1px solid #dce9ad;
+    /* color: #dce9ad */
+}
+.motivator-respectful::before {
+    background-image: url("/images/motivators/respectful_back-emotional.svg");
+}
+
+.motivator-relatable {
+    border: 1px solid #dce9ad;
+    /* color: #dce9ad */
+}
+.motivator-relatable::before {
+    background-image: url("/images/motivators/relatable_back-emotional.svg");
+}
+
+.motivator-principled {
+    border: 1px solid #dce9ad;
+    /* color: #dce9ad */
+}
+.motivator-principled::before {
+    background-image: url("/images/motivators/principled_back-emotional.svg");
+}
+
+.motivator-joyful {
+    border: 1px solid #dce9ad;
+    /* color: #dce9ad */
+}
+.motivator-joyful::before {
+    background-image: url("/images/motivators/joyful_back-emotional.svg");
+}
+
+.motivator-honest {
+    border: 1px solid #dce9ad;
+    /* color: #dce9ad */
+}
+.motivator-honest::before {
+    background-image: url("/images/motivators/honest_back-emotional.svg");
+}
+
+.motivator-empathetic {
+    border: 1px solid #dce9ad;
+    /* color: #dce9ad */
+}
+.motivator-empathetic::before {
+    background-image: url("/images/motivators/empathetic_back-emotional.svg");
+}
+
+.motivator-dependable {
+    border: 1px solid #dce9ad;
+    /* color: #dce9ad */
+}
+.motivator-dependable::before {
+    background-image: url("/images/motivators/dependable_back-emotional.svg");
+}
+
+.motivator-authentic {
+    border: 1px solid #dce9ad;
+    /* color: #dce9ad */
+}
+.motivator-authentic::before {
+    background-image: url("/images/motivators/authentic_back-emotional.svg");
+}

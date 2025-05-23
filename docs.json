@@ -3,7 +3,7 @@
   "theme": "maple",
   "name": "Apex Documentation",
   "colors": {
-    "primary": "#5F810A",
+    "primary": "#fd9332",
     "light": "#C0ED2E",
     "dark": "#C0ED2E"
   },
@@ -16,22 +16,31 @@
           {
             "group": "Get Started",
             "pages": [
-              "index",
-              "quickstart",
-              "development"
+              "getting-started/introduction",
+              "getting-started/quickstart",
+              "getting-started/engaging",
+              "getting-started/what_we_are"
             ]
           },
           {
-            "group": "Essentials",
+            "group": "Motivations",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/settings",
-              "essentials/navigation",
-              "essentials/reusable-snippets"
+              "motivations/overview",
+              "motivations/measurement",
+              "motivations/statistical_validation"
+            ]
+          },
+          {
+            "group": "Product",
+            "pages": [
+              "product/motivemodel",
+              "product/motivepath",
+              "product/motiveloop",
+              "product/platform",
+              "product/integrations"
             ]
           }
+          
         ]
       },
       {
@@ -50,25 +59,14 @@
               "directory": "api-reference"
             }
           }
-          
         ]
       }
     ],
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
+          "anchor": "Case Studies",
+          "href": "https://apexscore.ai/case-studies",
           "icon": "newspaper"
         }
       ]
@@ -82,20 +80,18 @@
     "links": [
       {
         "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "href": "mailto:success@apexscore.ai"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Log Into Apex",
+      "href": "https://my.apexscore.ai"
     }
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "linkedin": "https://www.linkedin.com/company/emotive-technologies-inc"
     }
   }
 }
