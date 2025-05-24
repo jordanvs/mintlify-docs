@@ -27,6 +27,7 @@
             "pages": [
               "motivations/overview",
               "motivations/measurement",
+              "motivations/shifts_over_time",
               "motivations/statistical_validation"
             ]
           },
@@ -45,6 +46,13 @@
               "integrations/ea_prizm",
               "integrations/niq",
               "integrations/dynamicyield"
+            ]
+          },
+          {
+            "group": "Methodology",
+            "pages": [
+              "methodology/ai_usage",
+              "methodology/synthetic_data"
             ]
           }
         ]
@@ -74,6 +82,11 @@
           "anchor": "Contact Us",
           "href": "https://apexscore.ai/contact",
           "icon": "envelope"
+        },
+        {
+          "anchor": "Trust and Compliance",
+          "href": "https://trust.apexscore.ai",
+          "icon": "shield-check"
         },
         {
           "anchor": "Case Studies",
