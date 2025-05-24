@@ -85,7 +85,7 @@ margin-right: 0.4em;
     /* color: #a2bfe6; */
 }
 .motivator-affordable::before {
-    background-image: url("/images/motivators/affordable_back-rational.svg");
+    background-image: url("/images/affordable_back-rational.svg");
 }
 .motivator-valuable {
     border: 1px solid #a2bfe6;
