@@ -28,7 +28,7 @@ margin-right: 0.4em;
     /* color: #a2bfe6; */
 }
 .motivator-uncomplicated::before {
-    background-image: url("/images/motivators/uncomplicated_back-rational.svg");
+    background-image: url("https://apexscore.ai/wp-content/uploads/2025/03/uncomplicated_back-rational@3x.webp");
 }
 
 .motivator-responsive {
@@ -36,7 +36,7 @@ margin-right: 0.4em;
     /* color: #a2bfe6; */
 }
 .motivator-responsive::before {
-    background-image: url("/images/motivators/responsive_back-rational.svg");
+    background-image: url("https://apexscore.ai/wp-content/uploads/2025/03/responsive_back-rational@3x.webp");
 }
 
 .motivator-predictable {
@@ -44,7 +44,7 @@ margin-right: 0.4em;
     /* color: #a2bfe6; */
 }
 .motivator-predictable::before {
-    background-image: url("/images/motivators/predictable_back-rational.svg");
+    background-image: url("https://apexscore.ai/wp-content/uploads/2025/03/predictable_back-rational@3x.webp");
 }
 
 .motivator-meaningful {
@@ -52,7 +52,7 @@ margin-right: 0.4em;
     /* color: #a2bfe6; */
 }
 .motivator-meaningful::before {
-    background-image: url("/images/motivators/meaningful_back-rational.svg");
+    background-image: url("https://apexscore.ai/wp-content/uploads/2025/03/meaningful_back-rational@3x.webp");
 }
 
 .motivator-involved {
@@ -60,7 +60,7 @@ margin-right: 0.4em;
     /* color: #a2bfe6; */
 }
 .motivator-involved::before {
-    background-image: url("/images/motivators/involved_back-rational.svg");
+    background-image: url("https://apexscore.ai/wp-content/uploads/2025/03/involved_back-rational@3x.webp");
 }
 
 .motivator-forward-thinking {
@@ -68,7 +68,7 @@ margin-right: 0.4em;
     /* color: #a2bfe6; */
 }
 .motivator-forward-thinking::before {
-    background-image: url("/images/motivators/forward-thinking_back-rational.svg");
+    background-image: url("https://apexscore.ai/wp-content/uploads/2025/03/forward-thinking_back-rational@3x.webp");
 }
 
 .motivator-distinct {
@@ -76,7 +76,7 @@ margin-right: 0.4em;
     /* color: #a2bfe6; */
 }
 .motivator-distinct::before {
-    background-image: url("/images/motivators/distinct_back-rational.svg");
+    background-image: url("https://apexscore.ai/wp-content/uploads/2025/03/distinct_back-rational@3x.webp");
 }
 
 /* Afforable and Valuable	 */
@@ -85,14 +85,14 @@ margin-right: 0.4em;
     /* color: #a2bfe6; */
 }
 .motivator-affordable::before {
-    background-image: url("/images/affordable_back-rational.svg");
+    background-image: url("https://apexscore.ai/wp-content/uploads/2025/03/affordable_back-rational@3x.webp");
 }
 .motivator-valuable {
     border: 1px solid #a2bfe6;
     /* color: #a2bfe6; */
 }
 .motivator-valuable::before {
-    background-image: url("/images/motivators/affordable_back-rational.svg");
+    background-image: url("https://apexscore.ai/wp-content/uploads/2025/03/valuable_back-rational@3x.webp");
 }
 
 /* ======================== EMOTIONAL ======================== */
@@ -102,7 +102,7 @@ margin-right: 0.4em;
     /* color: #dce9ad */
 }
 .motivator-respectful::before {
-    background-image: url("/images/motivators/respectful_back-emotional.svg");
+    background-image: url("https://apexscore.ai/wp-content/uploads/2025/03/respectful_back-emotional@3x.webp");
 }
 
 .motivator-relatable {
@@ -110,7 +110,7 @@ margin-right: 0.4em;
     /* color: #dce9ad */
 }
 .motivator-relatable::before {
-    background-image: url("/images/motivators/relatable_back-emotional.svg");
+    background-image: url("https://apexscore.ai/wp-content/uploads/2025/03/relatable_back-emotional@3x.webp");
 }
 
 .motivator-principled {
@@ -118,7 +118,7 @@ margin-right: 0.4em;
     /* color: #dce9ad */
 }
 .motivator-principled::before {
-    background-image: url("/images/motivators/principled_back-emotional.svg");
+    background-image: url("https://apexscore.ai/wp-content/uploads/2025/03/principled_back-emotional@3x.webp");
 }
 
 .motivator-joyful {
@@ -126,7 +126,7 @@ margin-right: 0.4em;
     /* color: #dce9ad */
 }
 .motivator-joyful::before {
-    background-image: url("/images/motivators/joyful_back-emotional.svg");
+    background-image: url("https://apexscore.ai/wp-content/uploads/2025/03/joyful_back-emotional@2x.webp");
 }
 
 .motivator-honest {
@@ -134,7 +134,7 @@ margin-right: 0.4em;
     /* color: #dce9ad */
 }
 .motivator-honest::before {
-    background-image: url("/images/motivators/honest_back-emotional.svg");
+    background-image: url("https://apexscore.ai/wp-content/uploads/2025/03/honest_back-emotional@3x.webp");
 }
 
 .motivator-empathetic {
@@ -142,7 +142,7 @@ margin-right: 0.4em;
     /* color: #dce9ad */
 }
 .motivator-empathetic::before {
-    background-image: url("/images/motivators/empathetic_back-emotional.svg");
+    background-image: url("https://apexscore.ai/wp-content/uploads/2025/03/empathetic_back-emotional@3x.webp");
 }
 
 .motivator-dependable {
@@ -150,7 +150,7 @@ margin-right: 0.4em;
     /* color: #dce9ad */
 }
 .motivator-dependable::before {
-    background-image: url("/images/motivators/dependable_back-emotional.svg");
+    background-image: url("https://apexscore.ai/wp-content/uploads/2025/03/dependable_back-emotional@3x.webp");
 }
 
 .motivator-authentic {
@@ -158,5 +158,5 @@ margin-right: 0.4em;
     /* color: #dce9ad */
 }
 .motivator-authentic::before {
-    background-image: url("/images/motivators/authentic_back-emotional.svg");
+    background-image: url("https://apexscore.ai/wp-content/uploads/2025/03/authentic_back-emotional@3x.webp");
 }
