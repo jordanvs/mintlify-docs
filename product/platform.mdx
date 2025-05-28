@@ -1,15 +1,185 @@
 ---
-title: "Apex Platform"
+title: "Apex Web Platform"
 description: "Explore, compare, and act on motivational intelligence through your own private web interface."
-sidebarTitle: "Web Platform Overview"
+sidebarTitle: "Web Platform"
 ---
 
-import {Motivator} from '/snippets/motivator.mdx';
+import { Motivator } from '/snippets/motivator.mdx';
 
 ## What is the Apex Platform?
 
-The **Apex Platform** is your control center and reference point for motivational intelligence. It provides on-demand access to the insights, models, and action plans developed through [**MotiveModel**](/product/motivemodel), [**MotivePath**](/product/motivepath), and [**MotiveLoop**](/product/motiveloop) so your team can explore, filter, and apply motivational data whenever needed.
+The **Apex Platform** is your control center and reference point for motivational intelligence. It provides:
+
+1. On-demand exploration of the insights and recommendations developed through [**MotiveModel**](/product/motivemodel), 
+1. Downloadable assets from [**MotivePath**](/product/motivepath) assignments, and is
+1. Regularly refreshed through [**MotiveLoop**](/product/motiveloop) so your team can explore, filter, and apply motivational data whenever needed.
 
 ## A Tour of Platform Features
 
-(Section Coming Soon)
+### MotiveModel
+
+Our web platform provides a way to explore the various [**MotiveModels**](/product/motivemodel) we create in a simple, concise, visual way.
+
+#### Motivations Map
+The Motivations Map provides a powerful visual of what truly drives your customers to advocate and purchase and how your brand measures up. This feature highlights the top four most influential motivators among your audience, allowing you to anchor your strategy in what matters most.
+
+Users can:
+- **Focus** on the four motivators most predictive of customer behavior for their brand.
+- **Visualize gaps** between what customers value and how the brand is perceived to perform.
+- **Identify opportunities** to improve advocacy, loyalty, and conversion by aligning with unmet motivational needs.
+
+The map categorizes each of Apex's 16 core motivators including (in this example case) <Motivator name="uncomplicated" />, <Motivator name="predictable" />, <Motivator name="dependable" />, and <Motivator name="involved" /> into zones of opportunity, strength, or neutrality, so teams can instantly interpret strategic priorities.
+
+Scroll down the page to access numeric performance values and percentages for each motivator, enabling more precise prioritization and action planning.
+
+This view is particularly useful for aligning cross-functional strategies across marketing, product, and customer experience with the motivations proven to drive real-world outcomes.
+
+<Frame>
+    <img src="/images/platform/motivations-map-1.png" alt="Motivations Map" />
+</Frame>
+<Frame>
+    <img src="/images/platform/motivations-map-2.png" alt="Motivations Quantified" />
+</Frame>
+
+#### KPIs & Metrics
+
+Linked to the KPIs you care about, the **Apex Score** provides a clear, quantified summary of how well your brand aligns with the motivational expectations of your customers.
+
+It offers two important reference points:
+
+- **Current Apex Score**: How you are perceived today across all measured motivators.
+- **Apex Potential**: A benchmark based on how your highest-performing customers (your advocates & loyalists) already perceive you.
+
+The Apex score gives you a motivational high-water mark to pursue and a measurable way to track your progress while also being translated to the metrics you already use and communicate.
+
+<Frame>
+    <img src="/images/platform/apex-score-1.png" alt="Apex Score" />
+</Frame>
+
+#### Action Topics and Themes
+The Action Topics feature organizes and filters out the noise from raw customer feedback, support interactions, and social media chatter to surface what really matters.
+
+<Tip>
+You may be familiar with 'text analytics': `topic` extraction and `sentiment` analysis (+, -, neutral) in the context of analyzing customer feedback. 
+
+Apex extends this industry-standard practice by mathematically linking and prioritizing the topics that matter most to your audience.
+</Tip>
+
+Instead of working through long lists of disconnected topics, this view organizes all qualitative inputs by the motivators that matter most to your audience. It shows which themes are influencing your top motivators like <Motivator name="dependable" />, <Motivator name="involved" />, or <Motivator name="empathetic" />, and to what degree.
+
+With this feature, teams can:
+- **Prioritize what to fix or enhance** based on its motivational weight, not just volume or recency
+- **Identify high-impact areas** where customer perception is tied directly to meaningful motivators
+- **Achieve better business outcomes** faster by allocating effort and resources to the themes that move the needle on loyalty, advocacy, and conversion
+
+This view acts as a translator between open-ended customer language and your motivational strategy, ensuring that your decisions are based on what's influential and not just what's loud.
+
+<Frame>
+    <img src="/images/platform/action-topics-1.png" alt="Action Topics" />
+</Frame>
+
+Apex goes further by using a trained LLM to surface the most weighted `themes` within those `topics` (the good, the bad, and the ugly), then clusters those associated `themes` to help you understand the full context behind each priority.
+
+<Frame>
+    <img src="/images/platform/action-topics-2.png" alt="Action Sub-Themes" />
+</Frame>
+
+Apex helps you execute and move the needle on the most important priorities by going even further to provide [AI-driven](/methodology/ai_usage) action ideas and inspirations powered by context specific to your brand and goals.
+
+<Frame>
+    <img src="/images/platform/action-topics-3.png" alt="Action Ideas and Inspirations" />
+</Frame>
+
+#### Segments
+
+The Segments feature allows users to define and explore named audience groups whether they're based on demographics, behavior, brand interaction, location, or any other custom attributes. By isolating and comparing motivational dynamics across these segments, you can spot patterns, track shifts, and take strategic action with precision.
+
+Key capabilities include:
+- **Custom Segment Creation**: Build and save segments like "Age 18-24" or "Purchased in l3m" for focused analysis.
+- **Market Context**: Layer in industry benchmarks and competitor data to see where your brand over- or under-performs.
+- **Motivational Differentiation**: Understand which motivators are most critical within each segment, such as <Motivator name="dependable" /> or <Motivator name="authentic" />, to tailor outreach and offerings accordingly.
+- **Growth & Share Opportunities**: Use segment-specific insights to identify untapped potential, minimize churn, or win back share from competitors.
+
+This feature is essential for teams aiming to differentiate in crowded markets and create precision strategies grounded in what distinct groups truly care about.
+
+<Frame>
+    <img src="/images/platform/segments-1.png" alt="Segments" />
+</Frame>
+<Frame>
+    <img src="/images/platform/segments-2.png" alt="Segments Demographics page" />
+</Frame>
+
+**Demographics**
+
+The Demographics view allows users to break down motivational performance by key audience segments, such as location, gender, education, or visit history, highlighting opportunities for targeted improvement and growth.
+
+With this feature, you can:
+- **Compare Aggregate Apex Scores** across segmented groups to identify which segments are over- or underperforming.
+- **Uncover loyalty gaps** between groups (e.g. women vs. men, or locations... etc) and understand which motivators are driving those gaps.
+- **Prioritize segment-specific actions** by linking motivational misalignment to concrete demographic attributes.
+
+This comparative view helps teams move from broad strategies to precision segmentation, revealing where the most meaningful motivational shifts will have the highest business impact. Whether you're refining acquisition strategies or optimizing experiences for underserved groups, the Demographics tool ensures you're aligned with what different audiences value most.
+
+<Frame>
+    <img src="/images/platform/demographics-1.png" alt="Segment Insights - Demographics" />
+</Frame>
+
+#### Competitive Insights
+
+The Competitive Insights view allows users to compare their brand's motivational performance against key competitors highlighting areas where they're outperforming or underperforming.
+
+<Frame>
+    <img src="/images/platform/competitors-1.png" alt="Competitive Insights - List" noZoom />
+</Frame>
+<Frame>
+    <img src="/images/platform/competitors-2.png" alt="Competitive Insights - Report" noZoom/>
+</Frame>
+
+#### Industry Insights
+
+The Industry Insights view allows users to compare their brand's motivational performance against key industry benchmarks highlighting areas where they're outperforming or underperforming.
+
+<Frame>
+    <img src="/images/platform/industry-1.png" alt="Industry Insights" noZoom />
+</Frame>
+<Frame>
+    <img src="/images/platform/industry-2.png" alt="Industry Insights - Report" noZoom />
+</Frame>
+
+#### On-Demand Filtering
+
+Empowers users to dynamically isolate and analyze any subgroup within any [**MotiveModel**](/product/motivemodel) (your brand, your competitors, your industry, etc) enabling hyper-targeted strategy building grounded in motivational insight.
+
+With the filters being dynamically available based on the data you provide the MotiveModel (see [measurement](/motivations/measurement)) you can:
+- **Slice motivational data by segment** to uncover new patterns and disparities.
+- **Zoom in on subgroups** that may be over- or underperforming.
+- **Compare Apex Scores** across tailored audience definitions to refine outreach and engagement strategies.
+- **Generate subgroup-specific recommendations** in real time by reapplying the full platform lens across motivations, topics, priorities, and action recommendations on a filtered view.
+
+Whether you're refining campaigns for a specific demographic or diagnosing performance in a location or loyalty tier, the Filters tool helps you move from general to precise without needing a new dataset or analysis.
+
+<Frame>
+    <img src="/images/platform/filters-1.png" alt="On-Demand Filtering" />
+</Frame>
+
+#### And More ...
+
+These are just some of the common ways to explore your [MotiveModels](/product/motivemodel) and various audiences within Apex.
+
+### MotivePath
+
+Because [MotivePath](/product/motivepath) is an assignment taken on by our experts and analysts, we make the deliverables and associated assets available to you for download within your Apex platform account.
+
+**MotivePath** applies the various [**MotiveModels**](/product/motivemodel) available within your Apex instance and extends them to reverse-engineer the most effective path to specific business goals like churn reduction, rather than a **MotiveModel**'s target of advocacy and purchase loyalty.
+
+### MotiveLoop
+
+All of the Apex platform's features are kept fresh and decision-ready through [**MotiveLoop**](/product/motiveloop), Apex's embedded intelligence layer.
+
+With **MotiveLoop**, you will see within your Apex platform instance:
+- **Ongoing model refreshes** as new data is collected, ensuring motivational insights stay aligned with your evolving audience.
+- **Updated recommendations** as segment-level [motivators shift](/motivations/shifts_over_time) so your strategy can adapt in real time, not months later.
+- **KPI tracking over time** for business metrics like Churn rate, Apex Score, NPS, referral rates, and any others you care about making incremental change measurable and achievable.
+- **Recalculated priorities** and themes based on updated customer feedback, so your interventions always target what matters most.
+
+This makes Apex not just a tool for analysis, but an always-on intelligence engine for acquisition, growth, and retention across segments.

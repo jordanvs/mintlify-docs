@@ -6,19 +6,21 @@ sidebarTitle: "Synthetic Data"
 
 import { Motivator } from '/snippets/motivator.mdx';
 
-<Warning>
-Synthetic data is a powerful tool, but it's not a substitute for direct audience interaction. Initial and periodic surveys (whether directly fielded or purchased) still matter, especially when market conditions change.
+<Tip>
+[Synthetic data](https://en.wikipedia.org/wiki/Synthetic_data) is a powerful tool and we use it together with direct audience interaction. Initial and periodic surveys (whether directly fielded, purchased from panel providers, or taken from holistic industry data) still matter, especially when market conditions change.
 
-Apex is currently studying the use of synthetic data to enhance our models. We are only including it in our practices in certain cases.
+We strategically incorporate synthetic data where it provides the most value and confidence in results.
 
 Our experts will discuss any use of synthetic data with you to ensure maximum understanding and confidence in your results.
-</Warning>
+</Tip>
+
+
 
 ## Why We Use Synthetic Data
 
-Motivational data is powerful, but collecting it exclusively through surveys can create respondent fatigue especially when dealing with niche segments or repeat engagements. Apex leverages synthetic data to reduce the burden on your audience while preserving the richness of motivational intelligence.
+Motivational data is powerful, but collecting it exclusively through surveys can create operational overhead and respondent fatigue especially when dealing with niche segments or repeat engagements. 
 
-By generating modeled motivational responses based on existing patterns, Apex ensures your models stay fresh, responsive, and scalable even in the absence of new survey data.
+Apex leverages synthetic data to reduce the burden on your audience while preserving the richness of motivational intelligence. By generating modeled motivational responses based on existing patterns, Apex ensures your models stay fresh, responsive, and scalable even in the absence of new survey data.
 
 ## How Synthetic Data Is Created
 
@@ -26,15 +28,47 @@ We follow a rigorous process that respects both behavioral science and data fide
 
 <Steps>
   <Step title="Seed from Real Responses">
-    Motivational models begin with real survey data that reveals the underlying drivers of key outcomes like purchase, retention, or churn.
+    Depending on your needs and the data you have available, the learned motivational patterns used by our synthetic generators can begin from any combination of:
+
+    1. Your zero-party [Apex survey](/motivations/measurement) data
+    2. Purchased survey sample for your brand (e.g. from a panel provider)
+    3. Holistic industry data (e.g. from a panel provider, Apex's own industry datasets)
+    
   </Step>
 
   <Step title="Connective CRM Data as Inputs">
-    We enhance motivational assumptions using CRM-linked behavioral, transactional, and demographic signals. These "connective" data points act as bridges allowing our models to predict motivational patterns. For example, see our [PRIZM integration](/integrations/ea_prizm).
+    We enhance motivational assumptions using CRM-linked behavioral, transactional, and demographic signals. These "connective" data points act as bridges allowing our models to predict motivational patterns. 
+    
+    <Info>
+    **Example**: 
+
+    *For illustration only. Actual data fields can vary by client and use case.*
+    
+    From your CRM, you provide us `20,000 ≤ n ≥ 1,000` customer-level attributes such as:
+    - Segment ID
+    - Tenure 
+    - Gender
+    - Age
+    - Income
+    - Location
+    - Product List
+    - Any open-ended customer feedback/support details
+
+    </Info>
+
+    See our [PRIZM integration](/integrations/ea_prizm) as another possible example of a strong connective data link that can connect your CRM data to the motivational profiles of your audiences.
+
+    <Note>
+    We do NOT require any connective data to include sensitive information/PII.
+    </Note>
   </Step>
 
   <Step title="Simulation and Expansion">
-    We simulate motivational responses for under-sampled segments or edge-case scenarios, ensuring strategic coverage across your full customer base.
+    We find motivational patterns from the seed data from `step 1` and model motivational patterns of those `(n)` people with the same combinations of connective data (i.e. 45-55 females in San Francisco having 3 products...) from `step 2`.
+    
+    We append predicted motivational responses to the connective data you provided to create a synthetic dataset. 
+    
+    This can include simulated motivational responses for under-sampled segments or edge-case scenarios, ensuring strategic coverage across your full customer base.
   </Step>
 
   <Step title="Validation and Guardrails">
@@ -44,7 +78,7 @@ We follow a rigorous process that respects both behavioral science and data fide
 
 ## Benefits of Synthetic Data
 
-- **Reduces Audience Fatigue**  
+- **Reduces Audience Fatigue and Overhead**  
   Eliminates the need for constant surveying, which can lead to drop-off or disengagement.
 
 - **Extends Coverage**  
@@ -54,7 +88,7 @@ We follow a rigorous process that respects both behavioral science and data fide
   Enables Apex to generate next-best actions and predictive models without waiting on survey cycles.
 
 - **Preserves Privacy**  
-  Uses anonymized, non-PII signals for safe and ethical extrapolation. Never generating synthetic individuals, only motivational profiles tied to real business contexts.
+  Ensures anonymized, non-PII signals for safe and ethical extrapolation. Never generating synthetic individuals, only motivational profiles tied to real business contexts.
 
 - **Strengthens Strategic Confidence**  
   Allows for "what-if" testing across potential interventions, helping validate options before full deployment.
@@ -63,25 +97,34 @@ We follow a rigorous process that respects both behavioral science and data fide
 
 While synthetic data enhances scalability and speed, it has reasonable constraints:
 
-- **Grounded in Observed Patterns**  
-  Synthetic motivational profiles are only as strong as the real data they're trained on. That's why we periodically refresh them with live responses to avoid drift.
+- Synthetic motivational profiles are only as strong as the real data they're trained on. That's why we periodically refresh them with live responses to avoid [drift](https://www.ibm.com/think/topics/model-drift#:~:text=Model%20drift%20refers%20to%20the,decision%2Dmaking%20and%20bad%20predictions.).
 
-- **Not a Substitute for First-Hand Learning**  
-  Synthetic expansion complements but does not replace the insight gained from direct audience interaction. Initial and periodic surveys still matter, especially when market conditions change.
+- Synthetic expansion enriches and amplifies the valuable insights gained from direct audience interaction. This is why we always include some element of zero-party motivational measurements.
 
-- **Assumption Boundaries**  
-  Synthetic data generation assumes stability in key relationships between motivation and behavior. We monitor for deviation and tune models accordingly to stay anchored in truth.
+- Synthetic data generation assumes stability in key relationships between motivation and behavior. We monitor for deviation and tune models accordingly to stay anchored in truth.
 
 These boundaries are by design. They keep synthetic modeling useful without overstating certainty ensuring our clients act with confidence, not assumption.
 
 ## Where It Fits in the Apex Stack
 
-Synthetic data plays the largest role in **MotiveLoop**, our embedded intelligence layer. It helps to:
+In all use cases, synthetic data lets Apex act with greater speed and specificity, continuously evolving alongside your customer landscape.
+
+### MotiveModel
+
+Synthetic data can play a role in [**MotiveModel**](/product/motivemodel) to remove or reduce requirements for [motivational measurement via survey](/motivations/measurement) if the right training data is available.
+
+### MotivePath
+
+Synthetic data can enhance [**MotivePath's**](/product/motivepath) analytical pipeline by training models with a more robust foundation.
+
+### MotiveLoop
+
+Synthetic data plays the largest role in [**MotiveLoop**](/product/motiveloop), our embedded intelligence layer. It helps to:
 
 - Refresh and retrain motivational models with maximum accuracy without exhausting audiences
 - Fill gaps when CRM segments are too small to sample
 - Test strategic interventions in sandboxed environments before live rollout
 
-This lets Apex act with greater speed and specificity, continuously evolving alongside your customer landscape.
 
-Synthetic data can also play a role in **MotiveModel** to remove initial requirements for a full survey if the ability to train on a holistic industry dataset is available.
+
+
