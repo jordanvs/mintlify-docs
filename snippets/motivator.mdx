@@ -1,5 +1,5 @@
-export const Motivator = ({ name }) => {   
+export const Motivator = ({ name, style }) => {   
   return (
-    <span class={`motivator motivator-${name.toLowerCase()}`}>{name}</span>
+    <span class={`motivator motivator-${name.toLowerCase()}`} style={style}>{name}</span>
   );
 }
